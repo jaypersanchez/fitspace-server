@@ -1,0 +1,940 @@
+[
+  {
+    "name": "Alternating SL leg raises",
+    "category": "core",
+    "muscleGroup": ["Abs", "Hips"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },
+      "videoUrl":
+      "https://vimeo.com/user88152925/review/764540407/a439075cb0"  
+  },
+  {
+    "name": "Alternating toe touches",
+    "category": "core",
+    "muscleGroup": ["Abs", "Hips"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },
+      "videoUrl":
+      "https://vimeo.com/user88152925/review/768741893/3ab00783ed"
+  },
+  {
+    "name": "band assisted pullups",
+    "category": "pull",
+    "muscleGroup": ["Back", "Shoulders"],
+    "level": "bg",
+    "equipment": "Bands",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },
+    "videoUrl":
+    "https://vimeo.com/user88152925/review/779466991/8c1a4aae8a"
+  },
+  {
+    "name": "Banded Pull-Aparts",
+    "category": "pull",
+    "muscleGroup": ["Back", "Shoulders"],
+    "level": "bg",
+    "equipment": "Bands",
+    "mets": 6,
+    "startingWeight":{
+        "lbs":5,
+        "kg":2.5
+      },
+    "videoUrl":
+      "https://vimeo.com/user88152925/review/770810091/db6a132cf3"
+  },
+  {
+    "name": "Close Grip Floor Press",
+    "category": "push",
+    "muscleGroup": ["Chest", "Triceps"],
+    "level": "bg",
+    "equipment": "Weighted bar",
+    "mets": 5,
+    
+    "startingWeight":{
+        "lbs":5,
+        "kg":2.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770802375/e9b569ea32"
+  },
+  {
+    "name": "Close Grip Push-ups",
+    "category": "push",
+    "muscleGroup": ["Chest", "Triceps"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 6,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770801073/ce932cf877"
+  },
+  {
+    "name": "Crossover butterflies",
+    "category": "Core",
+    "muscleGroup": ["Abs", "Hips"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/768742538/e3c552a058"
+  },
+  {
+    "name": "DB skull crushers",
+    "category": "push",
+    "muscleGroup": ["Triceps"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":5,
+        "kg":2.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770802888/a5172f29c4"
+  },
+  {
+    "name": "Deadbugs",
+    "category": "core",
+    "muscleGroup": ["abs", "hips"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/764541128/218c1d9553"
+  },
+  {
+    "name": "Eccentric DB RDL",
+    "category": "lower body",
+    "muscleGroup": ["Legs"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/768745757/ff0ffba98a"
+  },
+  {
+    "name": "Eccentric leg raises",
+    "category": "core",
+    "muscleGroup": ["abs", "hips"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/768743206/5dd2e3efb0"
+  },
+  {
+    "name": "Explosive Push-ups",
+    "category": "push",
+    "muscleGroup": ["chest"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 8,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/771264104"
+  },
+  {
+    "name": "Flutter Kicks",
+    "category": "core",
+    "muscleGroup": ["abs"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/764539843/c8eb4d50b6"
+  },
+  {
+    "name": "Goblet Squat with pause",
+    "category": "lower body",
+    "muscleGroup": ["Legs"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770802022/f3151926e9"
+  },
+  {
+    "name": "Heel tap swivels",
+    "category": "core",
+    "muscleGroup": ["abs", "hips"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/764542741/8720d59fb7"
+  },
+  {
+    "name": "High plank with twist",
+    "category": "core",
+    "muscleGroup": ["abs", "hips"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/764543763/cb8cb3d3bb"
+  },
+  {
+    "name": "In & Outs",
+    "category": "core",
+    "muscleGroup": ["abs"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/764540020/f6ad6f8589"
+  },
+  {
+    "name": "Isometric Curl hold",
+    "category": "pull",
+    "muscleGroup": ["Bicep"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":5,
+        "kg":2.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770812050/4057660b07"
+  },
+  {
+    "name": "Isometric push-ups",
+    "category": "push",
+    "muscleGroup": ["Chest"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 8,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770943532/d7d91a9f97"
+  },
+  {
+    "name": "Pulse Lunges",
+    "category": "lower body",
+    "muscleGroup": ["Legs"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770801594/3bba9d6af3"
+  },
+  {
+    "name": "Quadruped plank",
+    "category": "core",
+    "muscleGroup": ["abs", "legs"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/764540154/28cccf765a"
+  },
+  {
+    "name": "Reverse Curl",
+    "category": "pull",
+    "muscleGroup": ["Bicep"],
+    "level": "bg",
+    "equipment": "Weight Bar",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770812780/2ba0273030"
+  },
+  {
+    "name": "Single arm DB row (pause)",
+    "category": "pull",
+    "muscleGroup": ["Back"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":5,
+        "kg":2.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770805766/21a086eb99"
+  },
+  {
+    "name": "Single leg leg extension (pause)",
+    "category": "lower body",
+    "muscleGroup": ["Legs"],
+    "level": "bg",
+    "equipment": "Machine",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/782127284/0cb1ed987a"
+  },
+  {
+    "name": "Standing Eccentric Tricep Extension",
+    "category": "push",
+    "muscleGroup": ["Tricep"],
+    "level": "bg",
+    "equipment": "Dumbbells",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770800678/82f5e14b92"
+  },
+  {
+    "name": "Supermans with pause",
+    "category": "core",
+    "muscleGroup": ["lower back", "shoulders"],
+    "level": "bg",
+    "equipment": "None",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/768744118/98edd06e82"
+  },
+  {
+    "name": "Rower Machine",
+    "category": "pull",
+    "muscleGroup": ["Back"],
+    "level": "adv",
+    "equipment": "Rower Machine",
+    "mets": 6,
+    "startingWeight": "Max resistance",
+    "videoUrl":
+      "https://vimeo.com/user88152925/review/779402159/cb7e35410b"
+  },
+  {
+    "name": "Incline treadmill walks",
+    "category": "cardio",
+    "muscleGroup": ["Lower body"],
+    "level": "adv",
+    "equipment": "Treadmill",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779402943/49bc8f854f"
+  },
+  {
+    "name": "Pulse curls",
+    "category": "push",
+    "muscleGroup": ["Biceps"],
+    "level": "adv",
+    "equipment": " Dumbbells",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779401314/5b81e2bacc"
+  },
+  {
+    "name": "Single leg leg press",
+    "category": "lower body",
+    "muscleGroup": ["Legs"],
+    "level": "adv",
+    "equipment": " Leg press machine",
+    "mets": 4,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779400193/d28f6c7014"
+  },
+  {
+    "name": "Single arm eccentric tricep extension",
+    "category": "push",
+    "muscleGroup": ["Triceps"],
+    "level": "adv",
+    "equipment": " Cable machine",
+    "mets": 4,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779399826/ac18c6f43c"
+  },
+  {
+    "name": "Physioball High planks",
+    "category": "core",
+    "muscleGroup": ["Abs", "Shoulders"],
+    "level": "adv",
+    "equipment": " Physio ball",
+    "mets": 4,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/771274983/cb614b60b5"
+  },
+  {
+    "name": "Leg raise and Adduction",
+    "category": "core",
+    "muscleGroup": ["Abs", "Legs"],
+    "level": "adv",
+    "equipment": " Physio ball",
+    "mets": 4,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/771274505/cff609ae19"
+  },
+  {
+    "name": "Overhead walk and Carry",
+    "category": "push",
+    "muscleGroup": ["Shoulders", "Forearms", "Abs"],
+    "level": "adv",
+    "equipment": " Dumbbells",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/771274097/bc8cc31200"
+  },
+  {
+    "name": "Hanging DB Side raise walks",
+    "category": "push",
+    "muscleGroup": ["Shoulders", "Forearms", "Abs"],
+    "level": "adv",
+    "equipment": " Dumbbells & bands",
+    "mets": 5,
+      "startingWeight":{
+        "lbs":5,
+        "kg":2.25
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/771273300/d96ab82660"
+  },
+  {
+    "name": "I , Y, Ts",
+    "category": "push",
+    "muscleGroup": ["Shoulders", "back"],
+    "level": "adv",
+    "equipment": " Dumbbells",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":5,
+        "kg":2.25
+      },    "videoUrl":
+      "https://vimeo.com/771272875"
+  },
+  {
+    "name": "Banded DB shoulder press",
+    "category": "push",
+    "muscleGroup": ["Shoulders"],
+    "level": "adv",
+    "equipment": " Dumbbells & bands",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":5,
+        "kg":2.25
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/771265530/c916d44cea"
+  },
+  {
+    "name": "Hanging band javelin farmer carry",
+    "category": "core",
+    "muscleGroup": ["forearms", "back"],
+    "level": "adv",
+    "equipment": " Barbell & Bands",
+    "mets": 6,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779467188/3dbdda7eb3"
+  },
+  {
+    "name": "Unilateral Lunges",
+    "category": "core",
+    "muscleGroup": ["Legs"],
+    "level": "adv",
+    "equipment": " Barbell",
+    "mets": 6,
+      "startingWeight":{
+        "lbs":5,
+        "kg":2.25
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779467365/5a5ff7978a"
+  },
+  {
+    "name": "Incline overhead walks",
+    "category": "cardio",
+    "muscleGroup": ["lower body"],
+    "level": "adv",
+    "equipment": " Treadmill optional: med ball",
+    "mets": 6,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/782126760/76622dc079"
+  },
+  {
+    "name": "Eccentric leg extension",
+    "category": "lower body",
+    "muscleGroup": ["Legs", "Quads"],
+    "level": "adv",
+    "equipment": " leg extension machine",
+    "mets": 4,
+      "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/782127159/77f2fd13ca"
+  },
+  {
+    "name": "Eccentric single leg extensions",
+    "category": "lower body",
+    "muscleGroup": ["Legs", "Quads"],
+    "level": "adv",
+    "equipment": " leg extension machine",
+    "mets": 4,
+      "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/782127432/02c02d6e4c"
+  },
+  {
+    "name": "Incline lateral shuffles",
+    "category": "cardio",
+    "muscleGroup": ["lower body"],
+    "level": "adv",
+    "equipment": " Treadmill optional: med ball",
+    "mets": 6,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/782127043/3d39bbe176"
+  },
+  {
+    "name": "Incline backpedals",
+    "category": "cardio",
+    "muscleGroup": ["lower body"],
+    "level": "adv",
+    "equipment": " Treadmill optional: med ball",
+    "mets": 6,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/782126898/80ca0c2191"
+  },
+  {
+    "name": "one sided bench press",
+    "category": "push",
+    "muscleGroup": ["Chest"],
+    "level": "adv",
+    "equipment": "Barbell",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":5,
+        "kg":2.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/770943290/5bcbdc746e"
+  },
+  {
+    "name": "Cable tricep Ext (Pause)",
+    "category": "push",
+    "muscleGroup": ["Triceps"],
+    "level": "adv",
+    "equipment": "Cable machine",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":5,
+        "kg":2.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779399826/ac18c6f43c"
+  },
+  {
+    "name": "Eccentric Pull-ups",
+    "category": "pull",
+    "muscleGroup": ["Back"],
+    "level": "adv",
+    "equipment": "Pullup bar",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779402531/7fa08ed325"
+  },
+  {
+    "name": "Single arm cable row (twist)",
+    "category": "pull",
+    "muscleGroup": ["Back"],
+    "level": "adv",
+    "equipment": "Cable machine",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779465751/e002628573"
+  },
+  {
+    "name": "Single arm javalin carries",
+    "category": "core",
+    "muscleGroup": ["forearms", "back"],
+    "level": "adv",
+    "equipment": "Barbell",
+    "mets": 6,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779467188/3dbdda7eb3"
+  },
+  {
+    "name": "incline treadmill walks",
+    "category": "cardio",
+    "muscleGroup": ["Lower body"],
+    "level": "adv",
+    "equipment": "Treadmill",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779402943/49bc8f854f"
+  },
+  {
+    "name": "Single leg iso calf raise and calf raise",
+    "category": "lower body",
+    "muscleGroup": ["legs"],
+    "level": "adv",
+    "equipment": "Leg press machine",
+    "mets": 4,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779401961/0ec9c76fd6"
+  },
+  {
+    "name": "Rower machine",
+    "category": "cardio",
+    "muscleGroup": ["back"],
+    "level": "adv",
+    "equipment": "Rower machine",
+    "mets": 6,
+    "startingWeight": "Max resistance",
+    "videoUrl":
+      "https://vimeo.com/user88152925/review/779402159/cb7e35410b"
+  },
+  {
+    "name": "Lat pulldowns (Pause)",
+    "category": "pull",
+    "muscleGroup": ["back"],
+    "level": "adv",
+    "equipment": "Cable machine",
+    "mets": 6,
+      "startingWeight":{
+        "lbs":15,
+        "kg":7
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779402531/7fa08ed325"
+  },
+  {
+    "name": "Eccentric lat pulldowns",
+    "category": "pull",
+    "muscleGroup": ["back"],
+    "level": "adv",
+    "equipment": "Cable machine",
+    "mets": 6,
+      "startingWeight":{
+        "lbs":15,
+        "kg":7
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779402647/3d2e398e82"
+  },
+  {
+    "name": "Single arm DB bench",
+    "category": "push",
+    "muscleGroup": ["chest"],
+    "level": "adv",
+    "equipment": "Dumbbells",
+    "mets": 5,
+      "startingWeight":{
+        "lbs":5,
+        "kg":2.25
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779466730/9f69b6518c"
+  },
+  {
+    "name": "Single leg hamstring curls w/ pause",
+    "category": "lower body",
+    "muscleGroup": ["legs", "hamstrings"],
+    "level": "adv",
+    "equipment": "Hamstring curl machine",
+    "mets": 4,
+    "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779401578/78cb46912e"
+  },
+  {
+    "name": "Isometric calf raise + calf raise",
+    "category": "lower body",
+    "muscleGroup": ["legs", "calves"],
+    "level": "adv",
+    "equipment": "Leg press machine",
+    "mets": 4,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779401769/05ef0da571"
+  },
+  {
+    "name": "eccentric single arm cable curl",
+    "category": "pull",
+    "muscleGroup": ["biceps"],
+    "level": "adv",
+    "equipment": "Cable machine",
+    "mets": 6,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/779466520/2c0deb62e1"
+  },
+  {
+    "name": "Kickstand rows",
+    "category": "pull",
+    "muscleGroup": ["back"],
+    "level": "adv",
+    "equipment": "Dumbbells",
+    "mets": 5,
+    "startingWeight":{
+        "lbs":5,
+        "kg":2.25
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/771264636/41c05c5b92"
+  },
+  {
+    "name": "Banded DB Front raise",
+    "category": "push",
+    "muscleGroup": ["shoulders"],
+    "level": "adv",
+    "equipment": "Dumbbells/ bands",
+    "mets": 5,
+      "startingWeight":{
+        "lbs":5,
+        "kg":2.25
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/771265194/6acb1b86f8"
+  },
+  {
+    "name": "Banded OH walks",
+    "category": "push",
+    "muscleGroup": ["shoulders"],
+    "level": "adv",
+    "equipment": "Dumbbells / band",
+    "mets": 5,
+  "startingWeight":{
+        "lbs":10,
+        "kg":4.5
+      },    "videoUrl":
+      "https://vimeo.com/771264817"
+  },
+  {
+    "name": "Banded Curls",
+    "category": "pull",
+    "muscleGroup": ["upper body"],
+    "level": "Kids",
+    "equipment": "Bands",
+    "mets": null,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/791664886/c10448d921"
+  },
+  {
+    "name": "Single Leg Floor Touches",
+    "category": "push",
+    "muscleGroup": ["legs"],
+    "level": "Kids",
+    "equipment": "none",
+    "mets": null,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },     "videoUrl":
+      "https://vimeo.com/user88152925/review/791664822/ce87e14e9e"
+  },
+  {
+    "name": "Single Leg Balance",
+    "category": "push",
+    "muscleGroup": ["legs"],
+    "level": "Kids",
+    "equipment": "none",
+    "mets": null,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/791664740/cebe7b4053"
+  },
+  {
+    "name": "Banded Squat and Front raise",
+    "category": "push",
+    "muscleGroup": ["legs", "upperbody"],
+    "level": "Kids",
+    "equipment": "Bands",
+    "mets": null,
+    "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },     "videoUrl":
+      "https://vimeo.com/user88152925/review/791664425/7240668b0f"
+  },
+  {
+    "name": "Banded Side Steps",
+    "category": "push",
+    "muscleGroup": ["legs"],
+    "level": "Kids",
+    "equipment": "bands",
+    "mets": null,
+   "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },     "videoUrl":
+      "https://vimeo.com/user88152925/review/791664427/a0f0f84e73"
+  },
+  {
+    "name": "In Place Lunges",
+    "category": "push",
+    "muscleGroup": ["legs"],
+    "level": "Kids",
+    "equipment": "none",
+    "mets": null,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/791664248/a92dcce4a6"
+  },
+  {
+    "name": "Seated Squats",
+    "category": "push",
+    "muscleGroup": ["legs"],
+    "level": "Kids",
+    "equipment": "none",
+    "mets": null,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/791664148/640d9271db"
+  },
+  {
+    "name": "Low Plank",
+    "category": "push",
+    "muscleGroup": ["core", "upperbody"],
+    "level": "Kids",
+    "equipment": "none",
+    "mets": null,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/791664694/4b65aa4bc2"
+  },
+  {
+    "name": "Plank Taps",
+    "category": "push",
+    "muscleGroup": ["core", "upperbody"],
+    "level": "Kids",
+    "equipment": "none",
+    "mets": null,
+  "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },    "videoUrl":
+      "https://vimeo.com/user88152925/review/791664625/9416e276ef"
+  },
+  {
+    "name": "Banded Pull-aparts",
+    "category": "push",
+    "muscleGroup": ["upperbody"],
+    "level": "Kids",
+    "equipment": "bands",
+    "mets": null,
+   "startingWeight":{
+        "lbs":0,
+        "kg":0
+      },     "videoUrl":
+      "https://vimeo.com/user88152925/review/791664560/cc277a8d9b"
+  },
+  {
+    "name": "Banded Hip Flexion",
+    "category": "push",
+    "muscleGroup": ["legs"],
+    "level": "Kids",
+    "equipment": "bands",
+    "mets": null,
+   "startingWeight":{
+        "lbs":0,
+        "kg":0
+      }, 
+      "videoUrl":
+      "https://vimeo.com/user88152925/review/791664509/6e4af7affb"
+  }
+]

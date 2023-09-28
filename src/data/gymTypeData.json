@@ -1,0 +1,7 @@
+[
+        { "code": "homeGym", "name": "Home" },
+        { "code": "smallGym", "name": "Small" },
+        { "code": "commercialGym", "name": "Commercial" },
+        { "code": "crossfitGym", "name": "Crossfit" }
+]
+

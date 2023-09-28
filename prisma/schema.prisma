@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("postgresql://postgres:postgres@35.186.163.239:5432/postgres")
+}
+
+model exercises {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  category            String?
+  muscle_group        String[]
+  level               String?
+  equipment           String?
+  mets                Float?
+  starting_weight_lbs Float?
+  starting_weight_kg  Float?
+  video_url           String?
+  starting_weight     String?
+}
+
+model user_account {
+  email String
+  password String
+  id  Int @id @default(autoincrement())
+}

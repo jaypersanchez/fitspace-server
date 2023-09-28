@@ -1,0 +1,87 @@
+[
+    {
+      "gymType": "smallGym",
+      "workoutType": "buildStrength",
+      "workoutTypeDescription": "Compound movements: Squats, deadlifts, bench press, overhead press.Bodyweight exercises: Pull-ups, dips, push-ups.Free weights: Dumbbell rows, Romanian deadlifts.Strength-focused circuits.",
+      "categoryKeywords": "push|pull "
+    },
+    {
+        "gymType": "smallGym",
+        "workoutType": "sizeHypertrophy",
+        "workoutTypeDescription": "Compound lifts: Squats, deadlifts, bench press, rows.Isolation exercises: Bicep curls, tricep extensions, leg curls.High-volume workouts with moderate weights.",
+        "categoryKeywords": "lower body|core"
+    },
+    {
+        "gymType": "smallGym",
+        "workoutType": "getRipped",
+        "workoutTypeDescription": "Circuit training: Combining strength and cardio exercises.HIIT (High-Intensity Interval Training) circuits.Tabata-style workouts.",
+        "categoryKeywords": "cardio|core|push|pull"
+    },
+    {
+        "gymType": "smallGym",
+        "workoutType": "overallFitnessCardio",
+        "workoutTypeDescription": "Functional training: Incorporating bodyweight and compound movements.Cardio intervals: Jump rope, treadmill sprints, bike intervals.Circuit workouts with cardio elements.",
+        "categoryKeywords": "cardio|core"
+    },
+    {
+        "gymType": "homeGym",
+        "workoutType": "buildStrength",
+        "workoutTypeDescription": "Dumbbell exercises: Dumbbell squats, bench press, rows.Bodyweight strength training.Resistance band workouts.",
+        "categoryKeywords": "core|push|pull|cardio"
+      },
+    {
+      "gymType": "homeGym",
+      "workoutType": "sizeHypertrophy",
+      "workoutTypeDescription": "Dumbbell and bodyweight exercises.Focusing on time-under-tension with controlled reps.Home gym-friendly hypertrophy circuits.",
+      "categoryKeywords": "core|push|pull|cardio|lower body"
+    },
+    {
+        "gymType": "homeGym",
+        "workoutType": "getRipped",
+        "workoutTypeDescription": "Bodyweight exercises combined with cardio elements.HIIT workouts with minimal equipment.Calisthenics-focused circuits.",
+        "categoryKeywords": "core|push|pull"
+    },
+    {
+        "gymType": "homeGym",
+        "workoutType": "overallFitnessCardio",
+        "workoutTypeDescription": "Bodyweight circuits with cardio intervals.Cardio-focused Tabata sessions.Incorporating cardio exercises like jumping jacks and burpees.",
+        "categoryKeywords": "cardio|lower body"
+    },
+    {
+      "gymType": "commercialGym",
+      "workoutType": "getRipped",
+      "workoutTypeDescription": "Traditional weightlifting combined with cardio.Group fitness classes like spinning or body conditioning.Combining strength training and circuit workouts.",
+      "categoryKeywords": "cardio|core|push|pull"
+    },
+    {
+        "gymType": "commercialGym",
+        "workoutType": "overallFitnessCardio",
+        "workoutTypeDescription": "Utilizing cardio machines: treadmill, elliptical, stationary bike.Group fitness classes with cardio elements.Mixed workouts with weights and cardio intervals.",
+        "categoryKeywords": "cardio|lower body|push|pull"
+    },
+    {
+        "gymType": "crossfitGym",
+        "workoutType": "buildStrength",
+        "workoutTypeDescription": "Olympic weightlifting: Snatches, clean and jerks.CrossFit-specific strength workouts.Complexes: Barbell complexes for overall strength.",
+        "categoryKeywords": "cardio|core|lower body"
+    },
+    {
+        "gymType": "crossfitGym",
+        "workoutType": "sizeHypertrophy",
+        "workoutTypeDescription": "CrossFit workouts with moderate weights and high reps.Incorporating movements like wall balls and kettlebell swings.Focusing on muscle engagement through various functional exercises.",
+        "categoryKeywords": "cardio|core|push|pull"
+    },
+    {
+        "gymType": "crossfitGym",
+        "workoutType": "getRipped",
+        "workoutTypeDescription": "High-intensity CrossFit workouts.AMRAP (As Many Rounds As Possible) circuits.Emphasizing bodyweight and plyometric exercises.",
+        "categoryKeywords": "cardio|core|lower body"
+    },
+    {
+      "gymType": "crossfitGym",
+      "workoutType": "overallFitnessCardio",
+      "workoutTypeDescription": "CrossFit-style cardio workouts: rowing, box jumps, double unders.Metcon (metabolic conditioning) workouts.Combining cardio movements with bodyweight exercises.",
+      "categoryKeywords": "push|pull|cardio|lower body"
+    }
+  ]
+  

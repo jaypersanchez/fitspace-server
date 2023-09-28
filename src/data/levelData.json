@@ -1,0 +1,7 @@
+[
+      { "code": "adv", "name": "Advance" },
+      { "code": "bg", "name": "Beginner" },
+      { "code": "kids", "name": "Kids" },
+      { "code": "usd", "name": "US Dollar" },
+      { "code": "aed", "name": "United Arab Emirates Dirham" }
+]
