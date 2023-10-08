@@ -99,7 +99,7 @@ export const userController = {
   getWeeklyPlan: async(req, res, next) => {
     try {
 
-      const userobj = req.query.email
+      const userobj = req.body.email
       console.log(`Email ${userobj}`)
       // Validate that _id is provided
       /*if (!email) {
