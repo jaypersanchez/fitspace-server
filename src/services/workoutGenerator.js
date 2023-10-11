@@ -124,7 +124,7 @@ async function createFullWorkoutPlan(user) {
     // Create an array to store the weekly workout plans
     let weeklyPlans = [];
     const daysPerWeek = user.frequency;
-    const exercisesPerDay = 3; //standard these are three different types of exercises within a session.
+    const exercisesPerDay = 5; //standard these are three different types of exercises within a session.
     const workoutPlan = [];
 
     //console.log(`${user.gymType}::${user.gymGoal}::${user.level}::${user.frequency}`)
@@ -169,7 +169,7 @@ async function createFullWorkoutPlan(user) {
         // Number of workout days per week
         const workoutDaysPerWeek = user.frequency;
         // Number of different exercises per workout day
-        const exercisesPerDay = 3; //by default
+        const exercisesPerDay = 5; //by default
         // Number of weeks
         const numberOfWeeks = 8; //by default
         
