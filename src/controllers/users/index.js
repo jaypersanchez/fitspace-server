@@ -99,7 +99,7 @@ export const userController = {
   getWeeklyPlan: async(req, res, next) => {
     try {
 
-      const userobj = req.body.email
+      const userobj = req.query.email
       console.log(`Email ${userobj}`)
       // Validate that _id is provided
       /*if (!email) {
@@ -258,22 +258,30 @@ export const userController = {
         .send({ status: "failure", message: "Something went wrong" });
     }
   },
+
+
   updateUser: async (req, res, next) => {
     // const user_data = req.body;
 
     try {
       const data = req.body;
-      // console.log(req.body);
-      const user = await User.findById(data._id);
+      console.log(`updateUserTO ${JSON.stringify(data.params._id)}::${JSON.stringify(data.params.name)}::${JSON.stringify(data.params.workoutPlans[1].complete)}`);
+      const user = await User.findById(data.params._id);
+      console.log(`updatingFROM ${JSON.stringify(user._id)}::${JSON.stringify(user.name)}::${JSON.stringify(user.workoutPlans[1].complete)}`);
       if (!user) return res.status(404).json({ msg: "User not found" });
-
-      const updates = Object.keys(req.body);
-      updates.forEach((update) => (user[update] = req.body[update]));
+      
+      const updates = Object.keys(req.body).filter(update => update !== '_id');
+      console.log(`updates ${JSON.stringify(updates)}`)
+      updates.forEach(update => (user[update] = req.body[update]));
       await user.save();
-      let updatedUser = await User.findById(data._id);
+      
+      
+      let updatedUser = await User.findById(user._id);
+      console.log(`updatedUser ${updatedUser.workoutPlans[1].complete}`)
       res.status(201).json(updatedUser);
     } catch (err) {
-      console.error(err.message);
+      console.error(`UpdateUser Error ${err.message}`);
+      console.error(`UpdateUser Error ${err.message}`);
       res.status(500).send("Server error");
     }
   },
