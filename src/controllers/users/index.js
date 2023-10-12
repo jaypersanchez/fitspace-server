@@ -265,19 +265,25 @@ export const userController = {
 
     try {
       const data = req.body;
-      console.log(`updateUserTO ${JSON.stringify(data.params._id)}::${JSON.stringify(data.params.name)}::${JSON.stringify(data.params.workoutPlans[1].complete)}`);
-      const user = await User.findById(data.params._id);
-      console.log(`updatingFROM ${JSON.stringify(user._id)}::${JSON.stringify(user.name)}::${JSON.stringify(user.workoutPlans[1].complete)}`);
+      //need index which is the workout week.
+      console.log(`updateUserTO ${JSON.stringify(data.userid)}::
+                                ${JSON.stringify(data.index)}`);
+      const user = await User.findById(data.userid);
+      console.log(`updatingFROM ${JSON.stringify(user._id)}::
+                                ${JSON.stringify(user.name)}::
+                                ${JSON.stringify(user.workoutPlans[data.index].complete)}`);
       if (!user) return res.status(404).json({ msg: "User not found" });
-      
-      const updates = Object.keys(req.body).filter(update => update !== '_id');
-      console.log(`updates ${JSON.stringify(updates)}`)
-      updates.forEach(update => (user[update] = req.body[update]));
+      //once user is found, just update
+      user.workoutPlans[data.index].complete = true
+      user.workoutPlans[data.index].completed_date = new Date();
+      //const updates = Object.keys(req.body).filter(update => update !== '_id');
+      //console.log(`updates ${JSON.stringify(updates)}`)
+      //updates.forEach(update => (user[update] = req.body[update]));
       await user.save();
       
       
-      let updatedUser = await User.findById(user._id);
-      console.log(`updatedUser ${updatedUser.workoutPlans[1].complete}`)
+      let updatedUser = await User.findById(data.userid);
+      console.log(`updatedUser ${updatedUser.workoutPlans[data.index].complete}`)
       res.status(201).json(updatedUser);
     } catch (err) {
       console.error(`UpdateUser Error ${err.message}`);

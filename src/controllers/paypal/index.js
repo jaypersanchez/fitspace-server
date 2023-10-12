@@ -8,6 +8,8 @@ import Stripe from "stripe";
 const stripeKey = process.env.STRIPE_SECRET_KEY;
 const stripe = new Stripe(stripeKey);
 console.log(`Stripe Key ${process.env.STRIPE_SECRET_KEY}`)
+import paypal from 'paypal-rest-sdk'
+
 /**
  *  The user controller
  * @namespace paypalController
@@ -21,9 +23,12 @@ export const paypalController = {
    * @param {Object} res The express response object
    * @param {Object} next The express next function
    */
- 
+  paypal.configure({
+    mode: 'sandbox', // Change to 'live' for production
+    client_id: 'YOUR_CLIENT_ID',
+    client_secret: 'YOUR_CLIENT_SECRET',
+  });
 
-  
 };
 
 // export {deleteUser,userLogin, createUser, userInfo};
