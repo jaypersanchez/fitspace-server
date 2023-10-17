@@ -56,6 +56,38 @@ export const userController = {
     }
   },
 
+  resetWorkoutWeeks: async (req, res, next) => {
+    try {
+      const { _id } = req.body;
+  
+      if (!mongoose.Types.ObjectId.isValid(_id)) {
+        return res.status(400).json({ error: 'Invalid request parameters' });
+      }
+  
+      const user = await User.findOneAndUpdate(
+        { _id }, // Find the user by _id
+        {
+          $set: {
+            'workoutPlans.$[].complete': false, // Update all workoutPlans.complete to false
+            'workoutPlans.$[].completed_date': null, // Set completed_date to null
+          },
+        },
+        { multi: true } // Update all matching elements
+      );
+  
+      if (!user) {
+        console.error(`User with _id ${_id} not found`);
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      return res.status(200).json({ message: 'User workout plans reset successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+  
+
   setCompleteWeek: async(req, res, next) => {
     const userObj = req.body;
     console.log(`${userObj._id}::${userObj.complete}`);

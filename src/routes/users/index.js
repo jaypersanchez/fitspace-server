@@ -23,6 +23,7 @@ userRoute.put("/update", userController.updateUser);
 userRoute.delete("/:userid", verifyTokenMiddle, userController.deleteUser);
 userRoute.get("/workoutplan/weekly", userController.getWeeklyPlan);
 userRoute.post("/workoutplan/complete", userController.setCompleteWeek);
+userRoute.post("/workoutplan/reset", userController.resetWorkoutWeeks);
 //Reference schema contains all the symbols for Level, Gym Type, Gym Goal 
 userRoute.get("/levels", userController.getLevelRef);
 userRoute.get("/gymtypes", userController.getGymTypeRef);
