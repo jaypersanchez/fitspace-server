@@ -59,11 +59,12 @@ export const userController = {
   resetWorkoutWeeks: async (req, res, next) => {
     try {
       const { _id } = req.body;
-  
+      console.log(`reset for ${_id}`)
+      
       if (!mongoose.Types.ObjectId.isValid(_id)) {
         return res.status(400).json({ error: 'Invalid request parameters' });
       }
-  
+      console.log(`find user ${_id}`)
       const user = await User.findOneAndUpdate(
         { _id }, // Find the user by _id
         {
@@ -74,7 +75,7 @@ export const userController = {
         },
         { multi: true } // Update all matching elements
       );
-  
+      console.log(`found user ${_id}`)
       if (!user) {
         console.error(`User with _id ${_id} not found`);
         return res.status(404).json({ error: 'User not found' });
