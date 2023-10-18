@@ -20,6 +20,7 @@ userRoute.put(
 );
 // userRoute.put("/update",verifyTokenMiddle, userController.updateUser)
 userRoute.put("/update", userController.updateUser);
+userRoute.put("/update/userworkoutplan", userController.updateUserWorkoutPlan)
 userRoute.delete("/:userid", verifyTokenMiddle, userController.deleteUser);
 userRoute.get("/workoutplan/weekly", userController.getWeeklyPlan);
 userRoute.post("/workoutplan/complete", userController.setCompleteWeek);

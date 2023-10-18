@@ -91,16 +91,16 @@ export const userController = {
 
   setCompleteWeek: async(req, res, next) => {
     const userObj = req.body;
-    console.log(`${userObj._id}::${userObj.complete}`);
+    console.log(`${userObj._id}::${userObj.weekid}::${userObj.complete}`);
     try {
-      const { _id, complete } = req.body;
+      const { _id, weekid, complete } = req.body;
   
       if (!mongoose.Types.ObjectId.isValid(_id) || complete === undefined) {
         return res.status(400).json({ error: 'Invalid request parameters' });
       }
   
       const user = await User.findOneAndUpdate(
-        { 'workoutPlans._id': _id },
+        { 'workoutPlans._id': weekid },
         {
           $set: {
             'workoutPlans.$.complete': complete,
@@ -292,8 +292,29 @@ export const userController = {
     }
   },
 
-
   updateUser: async (req, res, next) => {
+    // const user_data = req.body;
+
+    try {
+      const data = req.body;
+      console.log(req.body);
+      const user = await User.findById(data._id);
+      if (!user) return res.status(404).json({ msg: "User not found" });
+
+      const updates = Object.keys(req.body);
+      updates.forEach((update) => (user[update] = req.body[update]));
+      await user.save();
+      let updatedUser = await User.findById(data._id);
+      res.status(201).json(updatedUser);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  },
+
+
+
+  updateUserWorkoutPlan: async (req, res, next) => {
     // const user_data = req.body;
 
     try {
