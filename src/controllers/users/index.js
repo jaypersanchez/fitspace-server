@@ -238,10 +238,31 @@ export const userController = {
    * @param {Object} next The express next function
    * @returns {Object} The user info
    */
-  userInfo: (req, res, next) => {
+  /*userInfo: (req, res, next) => {
     res.status(200).send({ user: req.user });
     return undefined;
+  },*/
+
+  userInfo: async (req, res, next) => {
+    try {
+      const { _id } = req.body._id; // Assuming _id is passed in the request body
+      console.log(`userInfo ${_id}`)
+      // Use Mongoose to fetch the user from the database by _id
+      const user = await User.findById(_id);
+      console.log(`user found`)
+      if (!user) {
+        console.log(`Error userInfo ${error}`)
+        return res.status(404).json({ error: 'User not found' });
+      }
+      console.log(`returning from userInfo`)
+      res.status(200).json({ user });
+    } catch (error) {
+      
+      res.status(500).json({ error: 'Server error' });
+    }
   },
+
+
   /**
    * The delete user controller returns the user info
    * @funtion deleteUser
