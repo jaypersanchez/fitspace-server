@@ -83,7 +83,7 @@ export const exerciseController = {
     try {
       const user = await userModel.findById(id);
       console.log({ user });
-      let selectedExercises = await createFullWorkoutPlan(user);
+      await createFullWorkoutPlan(user);
       /*
       // temporary find user and populate workouts
       const foundUser = await userModel.findById(user.users._id).populate({
@@ -92,7 +92,7 @@ export const exerciseController = {
 
       return res.json({
         success: true,
-        data: selectedExercises,
+        user: user.id,
       });
     } catch (err) {
       console.log(err);

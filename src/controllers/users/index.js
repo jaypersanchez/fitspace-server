@@ -238,9 +238,16 @@ export const userController = {
    * @param {Object} next The express next function
    * @returns {Object} The user info
    */
-  userInfo: (req, res, next) => {
-    res.status(200).send({ user: req.user });
-    return undefined;
+  userInfo: async (req, res, next) => {
+    try {
+      console.log({ body: req.query });
+      const user = await User.findById(req.query._id);
+      console.log({ user });
+      res.status(200).send(user);
+    } catch (error) {
+      res.status(500).send(error);
+      return undefined;
+    }
   },
   /**
    * The delete user controller returns the user info
