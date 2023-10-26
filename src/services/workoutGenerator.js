@@ -204,7 +204,7 @@ function generateDailyExercises(exercises, exercisesPerDay) {
       exerciseCategory = 'push';
     }
 
-    console.log(`exercise category ${exerciseCategory} for Exercise Day ${exercise}`)
+    //console.log(`exercise category ${exerciseCategory} for Exercise Day ${exercise}`)
 
     let availableExercises;
         
@@ -218,6 +218,7 @@ function generateDailyExercises(exercises, exercisesPerDay) {
     // Remove the selected exercise from the category it belongs to
     
       availableExercises = availableExercises.concat(otherExercises);
+      console.log(`exercise category ${exerciseCategory} for Exercise Day ${exercise}`)
       randomExercise = getRandomExercise(availableExercises);
      
       
