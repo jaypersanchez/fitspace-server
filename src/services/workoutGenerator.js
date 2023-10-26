@@ -119,139 +119,95 @@ function formatWeeklyWorkoutData(workouts, user) {
 
 async function createFullWorkoutPlan(user) {
   try {
-    // Define the number of weeks for 2 months
     const numberOfWeeks = 8;
-    // Create an array to store the weekly workout plans
-    let weeklyPlans = [];
-    const daysPerWeek = user.frequency;
-    const exercisesPerDay = 5; //standard these are three different types of exercises within a session.
     const workoutPlan = [];
+    const exercisesPerDay = 5;
 
-    //console.log(`${user.gymType}::${user.gymGoal}::${user.level}::${user.frequency}`)
-    //get the category keywords based on the gym type and workout type
-    //console.log(`workoutType ${JSON.stringify(user.gymGoal[0])}::${user.gymType}::${user._id}`)
     const queryWorkoutCriteria = {
-      gymType:user.gymType, 
-      workoutType: {
-        $in: [user.gymGoal[0], user.gymGoal[1]]
+      gymType: user.gymType,
+      workoutType: { $in: [user.gymGoal[0], user.gymGoal[1]] }
+    };
+
+    const workouts = await WorkoutTypesMatrix.find(queryWorkoutCriteria);
+    const concatenatedKeywords = workouts.map(workout => workout.categoryKeywords).join('|');
+
+    const query = {
+      $and: [
+        { categoryKeywords: { $regex: concatenatedKeywords, $options: 'i' } },
+        { level: { $in: [user.level] } }
+      ]
+    };
+
+    const exercises = await Exercise.find(query);
+    const workoutDaysPerWeek = user.frequency;
+
+    for (let week = 0; week < numberOfWeeks; week++) {
+      const weeklyPlan = [];
+
+      // Determine if it's a pull or push week
+      const isPullWeek = week % 2 === 0;
+
+      for (let day = 0; day < workoutDaysPerWeek; day++) {
+        const dailyExercises = generateDailyExercises(exercises, exercisesPerDay, isPullWeek);
+
+        weeklyPlan.push({ day: day + 1, exercises: dailyExercises });
       }
+
+      workoutPlan.push({ week: week + 1, days: weeklyPlan });
     }
-    //console.log(queryWorkoutCriteria)
-    
-    WorkoutTypesMatrix
-    .find(queryWorkoutCriteria)
-    .then(workouts => {
-      //console.log(`workouts ${workouts}`)
-      const concatenatedKeywords = workouts.map(workout => workout.categoryKeywords).join('|');
-      //console.log("Concatenated Keywords:", concatenatedKeywords);
-      const query = {
-        $and: [
-          {
-            category: {
-              $regex: concatenatedKeywords,
-              $options: 'i',
-            }
-          },
-          {
-            level: {
-              $in: [user.level]
-            }
-          }
-        ]
-      }//query
-      Exercise.find(query)
-      .then(exercises => {
-        //console.log("Exercises:", exercises);
-        // Handle the retrieved exercises
-        return exercises
-      })
-      .then(exercises => {
-        // Number of workout days per week
-        const workoutDaysPerWeek = user.frequency;
-        // Number of different exercises per workout day
-        const exercisesPerDay = 5; //by default
-        // Number of weeks
-        const numberOfWeeks = 8; //by default
-        
-        //Generate workout plan
-        for (let week = 0; week < numberOfWeeks; week++) {
-          const weeklyPlan = [];
-          for (let day = 0; day < workoutDaysPerWeek; day++) {
-            const dailyExercises = [];
-            for (let exercise = 0; exercise < exercisesPerDay; exercise++) {
-              const randomExercise = getRandomExercise(exercises);
-              dailyExercises.push(randomExercise);
-            }
-            weeklyPlan.push({ day: day + 1, exercises: dailyExercises });
-          }
-          workoutPlan.push({ week: week + 1, days: weeklyPlan });
+
+    const currentDay = new Date();
+    const userDoc = await UserModel.findOne({ email: user.email });
+
+    if (!userDoc) {
+      throw new Error('User not found');
+    }
+
+    for (const week of workoutPlan) {
+      const weekData = { days: [] };
+
+      for (const day of week.days) {
+        const dayData = { exercises: [] };
+
+        for (const exercise of day.exercises) {
+          currentDay.setDate(currentDay.getDate() + 1);
+          const exerciseData = { newday: currentDay, ...exercise };
+          dayData.exercises.push(exerciseData);
         }
-          //console.log(`WORKOUTPLAN ${JSON.stringify(workoutPlan)}`)
-          return workoutPlan
-      })
-      .then(workoutPlan => {
-        let currentDay = new Date();
-        // Step 1: Fetch the user document
-        UserModel.findOne({email: user.email})
-        .then(user => {
-          if (!user) {
-            throw new Error('User not found');
-          }
 
-          // Step 2: Add the generated workout plan to the workoutPlans array
-          //user.workoutPlans.push(...workoutPlan);
-          for (const week of workoutPlan) {
-            const weekData = { days: [] };
-          
-            for (const day of week.days) {
-              const dayData = { exercises: [] };
-          
-              for (const exercise of day.exercises) {
-                // You can process each exercise and its data here
-                // For now, let's assume exerciseData is the processed exercise data
-                let newday = currentDay.setDate(currentDay.getDate()+1)
-                const exerciseData = { newday, ...exercise }; // Copy the exercise data
-                dayData.exercises.push(exerciseData);
-                //console.log(`Exercise WEEK ${JSON.stringify(week.week)}::DAY ${JSON.stringify(day.day)}`)
-                //console.log(`exercises ${JSON.stringify(exercise)}`)
-                //console.log("\n")
+        weekData.days.push(dayData);
+      }
 
-              }
-          
-              weekData.days.push(dayData);
-              //console.log(`Weekly Exercises ${JSON.stringify(weekData)}`)
-              //console.log("\n")
-            }
-          
-            user.workoutPlans.push(weekData);
-            //console.log(`user.workoutPlans ${JSON.stringify(user.workoutPlans)}`)
-          }
+      userDoc.workoutPlans.push(weekData);
+    }
 
-          // Step 3: Save the modified user document
-          return user.save();
-        })
-        .then(savedUser => {
-          console.log('Workout plan saved successfully:', savedUser);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          // Handle errors
-        });
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        // Handle errors
-      });
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      console.trace(error);
-    });
-    
+    await userDoc.save();
+    console.log('Workout plan saved successfully');
   } catch (error) {
-    console.trace(error);
+    console.error('Error:', error);
   }
 }
+
+function generateDailyExercises(exercises, exercisesPerDay, isPullWeek) {
+  const dailyExercises = [];
+  let hasCoreExercise = false;
+
+  for (let exercise = 0; exercise < exercisesPerDay; exercise++) {
+    const exerciseCategory = isPullWeek ? 'pull' : 'push';
+    const randomExercise = getRandomExercise(exercises, exerciseCategory);
+
+    if (exercise === exercisesPerDay - 1 && !hasCoreExercise) {
+      const coreExercise = getRandomExercise(exercises, 'core');
+      dailyExercises.push(coreExercise);
+      hasCoreExercise = true;
+    }
+
+    dailyExercises.push(randomExercise);
+  }
+
+  return dailyExercises;
+}
+
 
 function getRandomExercise(exercises) {
   const randomIndex = Math.floor(Math.random() * exercises.length);
