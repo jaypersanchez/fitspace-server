@@ -130,7 +130,7 @@ async function createFullWorkoutPlan(user) {
 
     const workouts = await WorkoutTypesMatrix.find(queryWorkoutCriteria);
     const concatenatedKeywords = workouts.map(workout => workout.categoryKeywords).join('|');
-
+    
     const query = {
       $and: [
         { categoryKeywords: { $regex: concatenatedKeywords, $options: 'i' } },
@@ -144,12 +144,8 @@ async function createFullWorkoutPlan(user) {
     for (let week = 0; week < numberOfWeeks; week++) {
       const weeklyPlan = [];
 
-      // Determine if it's a pull or push week
-      const isPullWeek = week % 2 === 0;
-
       for (let day = 0; day < workoutDaysPerWeek; day++) {
-        const dailyExercises = generateDailyExercises(exercises, exercisesPerDay, isPullWeek);
-
+        const dailyExercises = generateDailyExercises(exercises, exercisesPerDay);
         weeklyPlan.push({ day: day + 1, exercises: dailyExercises });
       }
 
@@ -188,21 +184,45 @@ async function createFullWorkoutPlan(user) {
   }
 }
 
-function generateDailyExercises(exercises, exercisesPerDay, isPullWeek) {
+function generateDailyExercises(exercises, exercisesPerDay) {
+  
   const dailyExercises = [];
-  let hasCoreExercise = false;
+  const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+  const pushExercises = exercises.filter(exercise => exercise.category === 'push');
+  const otherExercises = exercises.filter(exercise => exercise.category !== 'pull' && exercise.category !== 'push');
+  let randomExercise
+
+  console.log(`otherExercises ${JSON.stringify(otherExercises)}::${otherExercises}`)
 
   for (let exercise = 0; exercise < exercisesPerDay; exercise++) {
-    const exerciseCategory = isPullWeek ? 'pull' : 'push';
-    const randomExercise = getRandomExercise(exercises, exerciseCategory);
-
-    if (exercise === exercisesPerDay - 1 && !hasCoreExercise) {
-      const coreExercise = getRandomExercise(exercises, 'core');
-      dailyExercises.push(coreExercise);
-      hasCoreExercise = true;
+    let exerciseCategory;
+    
+    // Check if the current day's category should be "pull" or "push" to alternate
+    if (exercise % 2 === 0) {
+      exerciseCategory = 'pull';
+    } else {
+      exerciseCategory = 'push';
     }
 
+    console.log(`exercise category ${exerciseCategory} for Exercise Day ${exercise}`)
+
+    let availableExercises;
+        
+    // Choose exercises from the appropriate category
+    if (exerciseCategory === 'pull') {
+      availableExercises = pullExercises;
+    } else {
+      availableExercises = pushExercises;
+    }
+
+    // Remove the selected exercise from the category it belongs to
+    
+      availableExercises = availableExercises.concat(otherExercises);
+      randomExercise = getRandomExercise(availableExercises);
+     
+      
     dailyExercises.push(randomExercise);
+    
   }
 
   return dailyExercises;
