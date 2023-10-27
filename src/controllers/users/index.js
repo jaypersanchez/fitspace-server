@@ -7,6 +7,8 @@ import GymType from "../../models/gymTypeSchema.js"
 import GymGoal from "../../models/gymGoalSchema.js"
 import loginUser from "../../services/login.js";
 import { resetToken } from "../../services/resetTokens.js";
+//this is the schema that contains collections of workout history.
+import CompleteWorkoutweek from "../../models/completedWorkoutWeekSchema.js"
 
 /**
  *  The user controller
@@ -112,6 +114,21 @@ export const userController = {
       if (!user) {
         console.error(`User with _id ${_id} not found`);
         return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Now, create a new CompleteWorkoutWeek instance and save it
+      if (complete) {
+        const completedWeekData = user.workoutPlans.find((week) => week._id.toString() === weekid);
+        if (completedWeekData) {
+          const completeWeek = new CompleteWorkoutweek({
+            userId: _id, // Set the user's ID
+            completedDate: new Date(), // Set the completion date
+            weekData: completedWeekData, // Set the completed week data
+          });
+
+          // Save the completed week
+          await completeWeek.save();
+        }
       }
   
       return res.status(200).json({ message: 'User updated successfully' });
