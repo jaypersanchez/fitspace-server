@@ -7,6 +7,8 @@ import GymType from "../../models/gymTypeSchema.js"
 import GymGoal from "../../models/gymGoalSchema.js"
 import loginUser from "../../services/login.js";
 import { resetToken } from "../../services/resetTokens.js";
+//this is the schema that contains collections of workout history.
+import CompleteWorkoutweek from "../../models/completedWorkoutWeekSchema.js"
 
 /**
  *  The user controller
@@ -56,18 +58,51 @@ export const userController = {
     }
   },
 
+  resetWorkoutWeeks: async (req, res, next) => {
+    try {
+      const { _id } = req.body;
+      console.log(`reset for ${_id}`)
+      
+      if (!mongoose.Types.ObjectId.isValid(_id)) {
+        return res.status(400).json({ error: 'Invalid request parameters' });
+      }
+      console.log(`find user ${_id}`)
+      const user = await User.findOneAndUpdate(
+        { _id }, // Find the user by _id
+        {
+          $set: {
+            'workoutPlans.$[].complete': false, // Update all workoutPlans.complete to false
+            'workoutPlans.$[].completed_date': null, // Set completed_date to null
+          },
+        },
+        { multi: true } // Update all matching elements
+      );
+      console.log(`found user ${_id}`)
+      if (!user) {
+        console.error(`User with _id ${_id} not found`);
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      return res.status(200).json({ message: 'User workout plans reset successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+  
+
   setCompleteWeek: async(req, res, next) => {
     const userObj = req.body;
-    console.log(`${userObj._id}::${userObj.complete}`);
+    console.log(`${userObj._id}::${userObj.weekid}::${userObj.complete}`);
     try {
-      const { _id, complete } = req.body;
+      const { _id, weekid, complete } = req.body;
   
       if (!mongoose.Types.ObjectId.isValid(_id) || complete === undefined) {
         return res.status(400).json({ error: 'Invalid request parameters' });
       }
   
       const user = await User.findOneAndUpdate(
-        { 'workoutPlans._id': _id },
+        { 'workoutPlans._id': weekid },
         {
           $set: {
             'workoutPlans.$.complete': complete,
@@ -79,6 +114,21 @@ export const userController = {
       if (!user) {
         console.error(`User with _id ${_id} not found`);
         return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Now, create a new CompleteWorkoutWeek instance and save it
+      if (complete) {
+        const completedWeekData = user.workoutPlans.find((week) => week._id.toString() === weekid);
+        if (completedWeekData) {
+          const completeWeek = new CompleteWorkoutweek({
+            userId: _id, // Set the user's ID
+            completedDate: new Date(), // Set the completion date
+            weekData: completedWeekData, // Set the completed week data
+          });
+
+          // Save the completed week
+          await completeWeek.save();
+        }
       }
   
       return res.status(200).json({ message: 'User updated successfully' });
@@ -205,9 +255,16 @@ export const userController = {
    * @param {Object} next The express next function
    * @returns {Object} The user info
    */
-  userInfo: (req, res, next) => {
-    res.status(200).send({ user: req.user });
-    return undefined;
+  userInfo: async (req, res, next) => {
+    try {
+      console.log({ body: req.query });
+      const user = await User.findById(req.query._id);
+      console.log({ user });
+      res.status(200).send(user);
+    } catch (error) {
+      res.status(500).send(error);
+      return undefined;
+    }
   },
   /**
    * The delete user controller returns the user info
@@ -259,25 +316,52 @@ export const userController = {
     }
   },
 
-
   updateUser: async (req, res, next) => {
     // const user_data = req.body;
 
     try {
       const data = req.body;
-      console.log(`updateUserTO ${JSON.stringify(data.params._id)}::${JSON.stringify(data.params.name)}::${JSON.stringify(data.params.workoutPlans[1].complete)}`);
-      const user = await User.findById(data.params._id);
-      console.log(`updatingFROM ${JSON.stringify(user._id)}::${JSON.stringify(user.name)}::${JSON.stringify(user.workoutPlans[1].complete)}`);
+      console.log(req.body);
+      const user = await User.findById(data._id);
       if (!user) return res.status(404).json({ msg: "User not found" });
-      
-      const updates = Object.keys(req.body).filter(update => update !== '_id');
-      console.log(`updates ${JSON.stringify(updates)}`)
-      updates.forEach(update => (user[update] = req.body[update]));
+
+      const updates = Object.keys(req.body);
+      updates.forEach((update) => (user[update] = req.body[update]));
+      await user.save();
+      let updatedUser = await User.findById(data._id);
+      res.status(201).json(updatedUser);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  },
+
+
+
+  updateUserWorkoutPlan: async (req, res, next) => {
+    // const user_data = req.body;
+
+    try {
+      const data = req.body;
+      //need index which is the workout week.
+      console.log(`updateUserTO ${JSON.stringify(data.userid)}::
+                                ${JSON.stringify(data.index)}`);
+      const user = await User.findById(data.userid);
+      console.log(`updatingFROM ${JSON.stringify(user._id)}::
+                                ${JSON.stringify(user.name)}::
+                                ${JSON.stringify(user.workoutPlans[data.index].complete)}`);
+      if (!user) return res.status(404).json({ msg: "User not found" });
+      //once user is found, just update
+      user.workoutPlans[data.index].complete = true
+      user.workoutPlans[data.index].completed_date = new Date();
+      //const updates = Object.keys(req.body).filter(update => update !== '_id');
+      //console.log(`updates ${JSON.stringify(updates)}`)
+      //updates.forEach(update => (user[update] = req.body[update]));
       await user.save();
       
       
-      let updatedUser = await User.findById(user._id);
-      console.log(`updatedUser ${updatedUser.workoutPlans[1].complete}`)
+      let updatedUser = await User.findById(data.userid);
+      console.log(`updatedUser ${updatedUser.workoutPlans[data.index].complete}`)
       res.status(201).json(updatedUser);
     } catch (err) {
       console.error(`UpdateUser Error ${err.message}`);
@@ -285,4 +369,42 @@ export const userController = {
       res.status(500).send("Server error");
     }
   },
+
+  getWorkoutHistory: async (req, res, next) => {
+      try {
+          const userId = req.query.userid;
+                    console.log(`Getting Workout History for ${userId}`)
+          // Find completed workout data for the user
+          const completedWorkouts = await CompleteWorkoutweek.find({ userId });
+
+          // Calculate the number of completed weeks
+          const completedWeeks = completedWorkouts.length;
+
+          // Find the user's registration date (assuming you have a registeredDate field)
+          //const user = await User.findById(userId)
+          User.findById(userId)
+          .then(user => {
+            console.log(`Userobj ${new Date(user.createdAt)}`)
+            // Calculate the duration in days
+            const registrationDate = new Date(user.registeredDate);
+            const currentDate = new Date();
+            const durationInDays = Math.floor((currentDate - registrationDate) / (1000 * 60 * 60 * 24));
+            // Calculate completion rate
+            const completionRate = (completedWeeks / durationInDays) * 100;
+            // Prepare a report object
+          const report = {
+            completedWeeks,
+            durationInDays,
+            completionRate,
+          };
+
+          return res.json(report);
+          })
+      }
+      catch(error) {
+        console.error('Error generating workout report:', error);
+        throw error;
+      }
+  },
+
 };

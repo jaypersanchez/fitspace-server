@@ -11,7 +11,7 @@ const userRoute = express.Router();
 
 userRoute.post("/new", newUserValidation, userController.createUser);
 userRoute.post("/login", userLoginValidation, userController.userLogin);
-userRoute.get("/self", verifyTokenMiddle, userController.userInfo);
+userRoute.get("/self", userController.userInfo);
 userRoute.put(
   "/refreshToken",
   verifyTokenMiddle,
@@ -20,12 +20,15 @@ userRoute.put(
 );
 // userRoute.put("/update",verifyTokenMiddle, userController.updateUser)
 userRoute.put("/update", userController.updateUser);
+userRoute.put("/update/userworkoutplan", userController.updateUserWorkoutPlan);
 userRoute.delete("/:userid", verifyTokenMiddle, userController.deleteUser);
 userRoute.get("/workoutplan/weekly", userController.getWeeklyPlan);
 userRoute.post("/workoutplan/complete", userController.setCompleteWeek);
-//Reference schema contains all the symbols for Level, Gym Type, Gym Goal 
+userRoute.post("/workoutplan/reset", userController.resetWorkoutWeeks);
+//Reference schema contains all the symbols for Level, Gym Type, Gym Goal
 userRoute.get("/levels", userController.getLevelRef);
 userRoute.get("/gymtypes", userController.getGymTypeRef);
 userRoute.get("/gymgoals", userController.getGymGoalRef);
+userRoute.get("/insights/workout-history", userController.getWorkoutHistory)
 
 export { userRoute };
