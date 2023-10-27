@@ -372,10 +372,8 @@ export const userController = {
 
   getWorkoutHistory: async (req, res, next) => {
       try {
-          
-          const data = req.body;
-          let userId = data.userid;
-          console.log(`Getting Workout History for ${userId}`)
+          const userId = req.query.userid;
+                    console.log(`Getting Workout History for ${userId}`)
           // Find completed workout data for the user
           const completedWorkouts = await CompleteWorkoutweek.find({ userId });
 
@@ -383,17 +381,17 @@ export const userController = {
           const completedWeeks = completedWorkouts.length;
 
           // Find the user's registration date (assuming you have a registeredDate field)
-          const user = await User.findById(userId);
-
-          // Calculate the duration in days
-          const registrationDate = user.registeredDate;
-          const currentDate = new Date();
-          const durationInDays = Math.floor((currentDate - registrationDate) / (1000 * 60 * 60 * 24));
-
-          // Calculate completion rate
-          const completionRate = (completedWeeks / durationInDays) * 100;
-
-          // Prepare a report object
+          //const user = await User.findById(userId)
+          User.findById(userId)
+          .then(user => {
+            console.log(`Userobj ${new Date(user.createdAt)}`)
+            // Calculate the duration in days
+            const registrationDate = new Date(user.registeredDate);
+            const currentDate = new Date();
+            const durationInDays = Math.floor((currentDate - registrationDate) / (1000 * 60 * 60 * 24));
+            // Calculate completion rate
+            const completionRate = (completedWeeks / durationInDays) * 100;
+            // Prepare a report object
           const report = {
             completedWeeks,
             durationInDays,
@@ -401,6 +399,7 @@ export const userController = {
           };
 
           return res.json(report);
+          })
       }
       catch(error) {
         console.error('Error generating workout report:', error);
