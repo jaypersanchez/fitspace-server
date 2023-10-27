@@ -12,7 +12,13 @@ app.use(cors("*"));
 app.use(express.json());
 
 app.get("/test", (req, res) => {
-  res.status(200).send({ message: `Server Version ${process.env.SERVER_VERSION}` });
+  res.status(200).send({ 
+    environment: [ 
+      `ServerVersion: ${process.env.SERVER_VERSION}`, 
+      `ServerEnvirontment: ${process.env.SERVER_ENVIRONMEMT}`, 
+      `Date: ${new Date()}`
+    ]  
+});
 });
 
 app.use("/users", userRoute);
