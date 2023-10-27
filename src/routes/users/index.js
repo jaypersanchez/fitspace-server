@@ -29,5 +29,6 @@ userRoute.post("/workoutplan/reset", userController.resetWorkoutWeeks);
 userRoute.get("/levels", userController.getLevelRef);
 userRoute.get("/gymtypes", userController.getGymTypeRef);
 userRoute.get("/gymgoals", userController.getGymGoalRef);
+userRoute.get("/insights/workout-history", userController.getWorkoutHistory)
 
 export { userRoute };
