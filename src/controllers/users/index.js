@@ -9,6 +9,7 @@ import loginUser from "../../services/login.js";
 import { resetToken } from "../../services/resetTokens.js";
 //this is the schema that contains collections of workout history.
 import CompleteWorkoutweek from "../../models/completedWorkoutWeekSchema.js"
+import axios from 'axios';
 
 /**
  *  The user controller
@@ -116,7 +117,7 @@ export const userController = {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      // Now, create a new CompleteWorkoutWeek instance and save it
+      // Now, create a new CompleteWorkoutWeek instance and save it.  This CompoleteWorkoutWeek is used for insights data
       if (complete) {
         const completedWeekData = user.workoutPlans.find((week) => week._id.toString() === weekid);
         if (completedWeekData) {
@@ -384,13 +385,14 @@ export const userController = {
           //const user = await User.findById(userId)
           User.findById(userId)
           .then(user => {
-            console.log(`Userobj ${new Date(user.createdAt)}`)
+            //console.log(`Userobj ${new Date(user.createdAt)}`)
             // Calculate the duration in days
-            const registrationDate = new Date(user.registeredDate);
+            const registrationDate = user.registeredDate;
             const currentDate = new Date();
             const durationInDays = Math.floor((currentDate - registrationDate) / (1000 * 60 * 60 * 24));
             // Calculate completion rate
             const completionRate = (completedWeeks / durationInDays) * 100;
+            console.log(`workouthistory ${registrationDate}::${currentDate}::${durationInDays}`)
             // Prepare a report object
           const report = {
             completedWeeks,
@@ -406,5 +408,59 @@ export const userController = {
         throw error;
       }
   },
+
+  getWorkoutHistorySummary: async (req, res, next) => {
+    try {
+      const apiKey = process.env.OPEN_AI_KEY
+      console.log(`APIKEY ${apiKey}`)
+
+      // Read the workout data from the request body
+      const { completedWeeks, durationInDays, completionRate } = req.body;
+
+      // Check if the data is valid
+      if (typeof completedWeeks !== 'number' || typeof durationInDays !== 'number' || typeof completionRate !== 'number') {
+          return res.status(400).json({ error: 'Invalid input data' });
+      }
+
+      const data = {
+          completedWeeks,
+          durationInDays,
+          completionRate,
+      };
+
+      /*const data = {
+        completedWeeks: 7,
+        durationInDays: 48,
+        completionRate: 14.58,
+      };*/
+
+      axios.post(
+        'https://api.openai.com/v1/engines/text-davinci-002/completions',
+        {
+          prompt: `Summarize workout data: Completed Weeks: ${data.completedWeeks}, Duration Between Weeks: ${data.durationInDays} days, Completion Rate: ${data.completionRate}%.`,
+          max_tokens: 50, // Adjust as needed
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+          },
+        }
+      )
+      .then(response => {
+        console.log(response.data.choices[0].text);
+        return res.json(response.data.choices[0].text)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+      
+    }
+    catch(error) {
+      console.error('Error generating workout history completion:', error);
+      throw error;
+    }
+  }
 
 };
