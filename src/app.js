@@ -6,19 +6,26 @@ import { exerciseRoute } from "./routes/exercises/index.js";
 import { paymentRoute } from "./routes/payment/index.js";
 import { userRoute } from "./routes/users/index.js";
 import { webhookRoute } from "./routes/webhooks/index.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors("*"));
 app.use(express.json());
 
+app.use("/paypal", express.static(path.join(__dirname, "../public/paypal")));
+
 app.get("/test", (req, res) => {
-  res.status(200).send({ 
-    environment: [ 
-      `ServerVersion: ${process.env.SERVER_VERSION}`, 
-      `ServerEnvirontment: ${process.env.SERVER_ENVIRONMEMT}`, 
-      `Date: ${new Date()}`
-    ]  
-});
+  res.status(200).send({
+    environment: [
+      `ServerVersion: ${process.env.SERVER_VERSION}`,
+      `ServerEnvirontment: ${process.env.SERVER_ENVIRONMEMT}`,
+      `Date: ${new Date()}`,
+    ],
+  });
 });
 
 app.use("/users", userRoute);

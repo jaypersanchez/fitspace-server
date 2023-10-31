@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 550px;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://www.paypal.com/sdk/js?client-id=AcRRVBjXB6EWP21CnbQmwqy1Yfhc8ZcBhQh7ilB6w02zHkbNdRj9tXLTLUbBFojsskxnvJECzH_wY4XV&vault=true&intent=subscription">
+    </script> 
+
+    <div id="paypal-button-container" style="width: 100%;"></div>
+
+    <script>
+        paypal.Buttons({
+            createSubscription: function(data, actions) {
+                return actions.subscription.create({
+                    'plan_id': 'P-8UD102930V954311LMU7T4NY' // Creates the subscription
+                });
+            },
+            onApprove: async function(data, actions) {
+                alert('You have successfully subscribed to ' + data.subscriptionID); // Optional message given to subscriber
+                let order = await actions.order.capture();
+                console.log(order);
+                window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(order));
+            },
+            onError: function(error){
+                console.log(error);
+                let errObj = { err: error, status: "FAILED"}
+                window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(errObj));
+                }
+        }).render('#paypal-button-container');
+    </script>
+</body>
+</html>
