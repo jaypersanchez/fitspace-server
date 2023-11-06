@@ -141,38 +141,39 @@ async function createFullWorkoutPlan(user) {
     const exercises = await Exercise.find(query);
     const workoutDaysPerWeek = user.frequency;
 
-    for (let week = 0; week < numberOfWeeks; week++) {
+    for (let week = 1; week <= numberOfWeeks; week++) {
       const weeklyPlan = [];
-
+      console.log(`Week ${week}\n`)
       /*
         Day 1 Leg: "isometric calf raise + calf raise" and then 2 pull exercises. It should have 4 leg exercises and 1 cardio exercise.
         Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises, it should have 4 push exercises and 1 core exercise.
         Day 3 Upper Body and Pull Day. It has all random exercises it should have 4 pull exercises and one core exercise
         Day 4 Let Day. It has 4 cardio exercises and 1 push. It should have 4 leg exercises and one cardio.
       */
-      for (let day = 0; day <= workoutDaysPerWeek; day++) {
-        const dailyExercises = generateDailyExercises(exercises, exercisesPerDay);
-        //const dailyExercises = generateDailyExercises(exercises, day);
+      for (let day = 1; day <= workoutDaysPerWeek; day++) {
+        //const dailyExercises = generateDailyExercises(exercises, exercisesPerDay);
+        const dailyExercises = generateDailyExercises(exercises, day);
         console.log(`Day ${day}\n`)
 
           // Iterate through the daily exercises and print details
         dailyExercises.forEach((exercise, index) => {
           console.log(`Exercise ${JSON.stringify(exercise)}\n`)
-          
+            //let exerciseobj = JSON.parse(exercise)
+
             //console.log(`Exercise ${index + 1}:`);
-            //console.log(`Name: ${exercise.name}`);
-            //console.log(`Category: ${exercise.category}`);
-            //console.log(`Level: ${exercise.level}`);
+            //console.log(`Name: ${exerciseobj.name}`);
+            //console.log(`Category: ${exerciseobj.category}`);
+            //console.log(`Level: ${exerciseobj.level}`);
             //console.log(`Muscle Group: ${exercise.muscleGroup.join(', ')}`);
             //console.log(`Equipment: ${exercise.equipment}`);
             //console.log(`Mets: ${exercise.mets}`);
             // Print other exercise details as needed
           
         });
-        weeklyPlan.push({ day: day+1, exercises: dailyExercises });
+        weeklyPlan.push({ day: day, exercises: dailyExercises });
       }
 
-      workoutPlan.push({ week: week + 1, days: weeklyPlan });
+      workoutPlan.push({ week: week, days: weeklyPlan });
     }
 
     const currentDay = new Date();
@@ -220,12 +221,12 @@ function generateDailyExercises(exercises, day) {
   console.log(`Generate plan for day ${day}`)
   if (day === 1) {
     // Day 1: Leg Day
-    const legExercises = exercises.filter(exercise => exercise.category === 'leg');
+    const legExercises = exercises.filter(exercise => exercise.category === 'lower body');
     const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
     
     // Add two specific leg exercises
-    dailyExercises.push(exercises.find(exercise => exercise.name === 'isometric calf raise'));
-    dailyExercises.push(exercises.find(exercise => exercise.name === 'calf raise'));
+    dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+    //dailyExercises.push(exercises.find(exercise => exercise.name === 'calf raise'));
     
     // Add two random leg exercises
     dailyExercises.push(getRandomExercise(legExercises));
@@ -261,7 +262,9 @@ function generateDailyExercises(exercises, day) {
     dailyExercises.push(coreExercise);
   } else if (day === 4) {
     // Day 4: Leg Day
-    const legExercises = exercises.filter(exercise => exercise.category === 'leg');
+    const legExercises = exercises.filter(exercise => exercise.category === 'lower body');
+    const pushExercises = exercises.filter(exercise => exercise.category === 'push');
+    const coreExercise = getRandomExercise(exercises, 'core');
     
     dailyExercises.push(getRandomExercise(legExercises));
     dailyExercises.push(getRandomExercise(legExercises));
@@ -269,14 +272,18 @@ function generateDailyExercises(exercises, day) {
     dailyExercises.push(getRandomExercise(legExercises));
     dailyExercises.push(getRandomCardioExercise(exercises));
   } else if (day === 5) {
-    // Repeating Day 1: Leg Day
-    const legExercises = exercises.filter(exercise => exercise.category === 'leg');
+    // Repeating Day 3: Leg Day
+    const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+    const coreExercise = getRandomExercise(exercises, 'core');
     
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomCardioExercise(exercises));
+    // Add four random pull exercises
+    dailyExercises.push(getRandomExercise(pullExercises));
+    dailyExercises.push(getRandomExercise(pullExercises));
+    dailyExercises.push(getRandomExercise(pullExercises));
+    dailyExercises.push(getRandomExercise(pullExercises));
+    
+    // Add one core exercise
+    dailyExercises.push(coreExercise);
   }
 
   return dailyExercises;
