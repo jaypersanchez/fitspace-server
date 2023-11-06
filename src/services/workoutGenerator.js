@@ -226,7 +226,7 @@ function generateDailyExercises(exercises, day) {
     
     // Add two specific leg exercises
     dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
-    //dailyExercises.push(exercises.find(exercise => exercise.name === 'calf raise'));
+    dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
     
     // Add two random leg exercises
     dailyExercises.push(getRandomExercise(legExercises));
@@ -263,7 +263,7 @@ function generateDailyExercises(exercises, day) {
   } else if (day === 4) {
     // Day 4: Leg Day
     const legExercises = exercises.filter(exercise => exercise.category === 'lower body');
-    const pushExercises = exercises.filter(exercise => exercise.category === 'push');
+    //const pushExercises = exercises.filter(exercise => exercise.category === 'push');
     const coreExercise = getRandomExercise(exercises, 'core');
     
     dailyExercises.push(getRandomExercise(legExercises));
@@ -271,19 +271,30 @@ function generateDailyExercises(exercises, day) {
     dailyExercises.push(getRandomExercise(legExercises));
     dailyExercises.push(getRandomExercise(legExercises));
     dailyExercises.push(getRandomCardioExercise(exercises));
-  } else if (day === 5) {
-    // Repeating Day 3: Leg Day
-    const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
-    const coreExercise = getRandomExercise(exercises, 'core');
-    
-    // Add four random pull exercises
-    dailyExercises.push(getRandomExercise(pullExercises));
-    dailyExercises.push(getRandomExercise(pullExercises));
-    dailyExercises.push(getRandomExercise(pullExercises));
-    dailyExercises.push(getRandomExercise(pullExercises));
-    
     // Add one core exercise
     dailyExercises.push(coreExercise);
+  } else if (day === 5) {
+    // Repeating Day 3: Leg Day
+    //const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+    //const coreExercise = getRandomExercise(exercises, 'core');
+
+    
+    // Add four random pull exercises
+    //dailyExercises.push(getRandomExercise(pullExercises));
+    //dailyExercises.push(getRandomExercise(pullExercises));
+    //dailyExercises.push(getRandomExercise(pullExercises));
+    //dailyExercises.push(getRandomExercise(pullExercises));
+    
+    // Add one core exercise
+    //dailyExercises.push(coreExercise);
+    dailyExercises.push(getRandomExercise(exercises, 'core'))
+    dailyExercises.push(getRandomExercise(exercises, 'core'))
+
+    dailyExercises.push(getRandomExercise(exercises, 'core'))
+    
+    // Add one cardio exercise
+    dailyExercises.push(getRandomCardioExercise(exercises));
+    dailyExercises.push(getRandomCardioExercise(exercises));
   }
 
   return dailyExercises;
