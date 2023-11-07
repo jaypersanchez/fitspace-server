@@ -149,6 +149,18 @@ async function createFullWorkoutPlan(user) {
         Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises, it should have 4 push exercises and 1 core exercise.
         Day 3 Upper Body and Pull Day. It has all random exercises it should have 4 pull exercises and one core exercise
         Day 4 Let Day. It has 4 cardio exercises and 1 push. It should have 4 leg exercises and one cardio.
+
+        3 day split example
+            Day 1- Lower, lower, lower, lower, cardio
+            Day 2- push,push,push,push, core
+            Day 3- Pull,Pull, Pull, Pull, core
+            
+            If there was 4 days it would be
+            Day 4 lower, lower , lower , lower , cardio.
+            Day 5 3 core exercises, 2 cardio exercises
+
+            Kids exercises should be 2 workouts per week, 4 random exercises each day.
+            But they should not repeat until all exercises have been done at least 1x
       */
       for (let day = 1; day <= workoutDaysPerWeek; day++) {
         //const dailyExercises = generateDailyExercises(exercises, exercisesPerDay);
@@ -157,13 +169,13 @@ async function createFullWorkoutPlan(user) {
 
           // Iterate through the daily exercises and print details
         dailyExercises.forEach((exercise, index) => {
-          console.log(`Exercise ${JSON.stringify(exercise)}\n`)
+          //console.log(`Exercise ${JSON.stringify(exercise)}\n`)
             //let exerciseobj = JSON.parse(exercise)
 
             //console.log(`Exercise ${index + 1}:`);
-            //console.log(`Name: ${exerciseobj.name}`);
-            //console.log(`Category: ${exerciseobj.category}`);
-            //console.log(`Level: ${exerciseobj.level}`);
+            console.log(`Name: ${exercise.name}`);
+            console.log(`Category: ${exercise.category}`);
+            console.log(`Level: ${exercise.level}\n`);
             //console.log(`Muscle Group: ${exercise.muscleGroup.join(', ')}`);
             //console.log(`Equipment: ${exercise.equipment}`);
             //console.log(`Mets: ${exercise.mets}`);
