@@ -258,12 +258,19 @@ function generateDailyExercises(exercises, day, user) {
     let pullExercises
     let pushExercises
     let coreExercise
+    let upperExercises
 
     // Day 1: Leg Day
     if(user.level && user.level.toLowerCase() === 'kids') {
       pushExercises = exercises.filter(exercise => exercise.category === 'pull');
+      /*upperExercises = exercises.filter(exercise => {
+        const regex = /^upper\s*body$/i;
+        return exercise.muscleGroup && exercise.muscleGroup.match(regex);
+      });*/
       coreExercise = getRandomExercise(exercises, 'core');
       dailyExercises.push(getRandomExercise(pushExercises));
+      dailyExercises.push(getRandomExercise(pushExercises));
+      //dailyExercises.push(getRandomExercise(upperExercises));
       dailyExercises.push(coreExercise);
     }
     
