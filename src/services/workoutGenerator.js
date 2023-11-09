@@ -253,25 +253,35 @@ function generateDailyExercises(exercises, day, user) {
   const dailyExercises = [];
   console.log(`Generate plan for day ${day}`)
   if (day === 1) {
+
+    let legExercises
+    let pullExercises
+    let pushExercises
+    let coreExercise
+
     // Day 1: Leg Day
-    if(user.level && user.level.toLowerCase() !== 'kids') {
-      const legExercises = exercises.filter(exercise => exercise.category === 'lower body');
-      const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+    if(user.level && user.level.toLowerCase() === 'kids') {
+      pushExercises = exercises.filter(exercise => exercise.category === 'pull');
+      coreExercise = getRandomExercise(exercises, 'core');
+      dailyExercises.push(getRandomExercise(pushExercises));
+      dailyExercises.push(coreExercise);
     }
     
     // Add two specific leg exercises
     if(user.level && user.level.toLowerCase() !== 'kids') {
+      legExercises = exercises.filter(exercise => exercise.category === 'lower body');
+      pullExercises = exercises.filter(exercise => exercise.category === 'pull');
       dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
       dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+      // Add two random leg exercises
+      dailyExercises.push(getRandomExercise(legExercises));
+      dailyExercises.push(getRandomExercise(legExercises));
+      // Add one cardio exercise
+      dailyExercises.push(getRandomCardioExercise(exercises));
     }
-    
-    
-    // Add two random leg exercises
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(legExercises));
-    
+   
     // Add one cardio exercise
-    dailyExercises.push(getRandomCardioExercise(exercises));
+    //dailyExercises.push(getRandomCardioExercise(exercises));
   } else if (day === 2) {
     // Day 2: Push Day
     const pushExercises = exercises.filter(exercise => exercise.category === 'push');
