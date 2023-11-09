@@ -121,7 +121,7 @@ async function createFullWorkoutPlan(user) {
   try {
     const numberOfWeeks = 8;
     const workoutPlan = [];
-    const exercisesPerDay = 5;
+    let exercisesPerDay = 5;
     console.log(`gymType ${user.gymType}`)
     const queryWorkoutCriteria = {
       gymType: user.gymType,
@@ -131,15 +131,34 @@ async function createFullWorkoutPlan(user) {
     const workouts = await WorkoutTypesMatrix.find(queryWorkoutCriteria);
     const concatenatedKeywords = workouts.map(workout => workout.categoryKeywords).join('|');
     
-    const query = {
+    /*const query = {
       $and: [
         { categoryKeywords: { $regex: concatenatedKeywords, $options: 'i' } },
         { level: { $in: [user.level] } }
       ]
+    };*/
+    const query = {
+      $and: [
+        {
+          $or: [
+            { categoryKeywords: { $regex: concatenatedKeywords.join('|'), $options: 'i' } },
+            { muscleGroup: { $in: muscleKeywords } }
+          ]
+        },
+        { level: { $in: [user.level] } }
+      ]
     };
-
     const exercises = await Exercise.find(query);
-    const workoutDaysPerWeek = user.frequency;
+    let workoutDaysPerWeek = user.frequency;
+
+    /** 
+     * Band aid fix to handle Kids level: 2 days workout per week and only 4 workout types per day
+     * Have to override the settings above
+     */
+    if(user.level === 'Kids') {
+      exercisesPerDay = 4
+      workoutDaysPerWeek = 2
+    }
 
     for (let week = 1; week <= numberOfWeeks; week++) {
       const weeklyPlan = [];
@@ -159,7 +178,7 @@ async function createFullWorkoutPlan(user) {
             Day 4 lower, lower , lower , lower , cardio.
             Day 5 3 core exercises, 2 cardio exercises
 
-            Kids exercises should be 2 workouts per week, 4 random exercises each day.
+            Kids exercises should be 2 workouts days per week, 4 random exercises each day.
             But they should not repeat until all exercises have been done at least 1x
       */
       for (let day = 1; day <= workoutDaysPerWeek; day++) {
