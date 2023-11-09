@@ -129,8 +129,10 @@ async function createFullWorkoutPlan(user) {
     };
 
     const workouts = await WorkoutTypesMatrix.find(queryWorkoutCriteria);
-    const concatenatedKeywords = workouts.map(workout => workout.categoryKeywords).join('|');
-    
+    const categoryKeywords = workouts.map(workout => workout.categoryKeywords);
+    const muscleKeywords = workouts.flatMap(workout => workout.muscleGroup);
+
+    //const concatenatedKeywords = workouts.map(workout => workout.categoryKeywords).join('|');
     /*const query = {
       $and: [
         { categoryKeywords: { $regex: concatenatedKeywords, $options: 'i' } },
@@ -141,7 +143,7 @@ async function createFullWorkoutPlan(user) {
       $and: [
         {
           $or: [
-            { categoryKeywords: { $regex: concatenatedKeywords.join('|'), $options: 'i' } },
+            { categoryKeywords: { $regex: categoryKeywords.join('|'), $options: 'i' } },
             { muscleGroup: { $in: muscleKeywords } }
           ]
         },
@@ -183,18 +185,18 @@ async function createFullWorkoutPlan(user) {
       */
       for (let day = 1; day <= workoutDaysPerWeek; day++) {
         //const dailyExercises = generateDailyExercises(exercises, exercisesPerDay);
-        const dailyExercises = generateDailyExercises(exercises, day);
+        const dailyExercises = generateDailyExercises(exercises, day, user);
         console.log(`Day ${day}\n`)
 
           // Iterate through the daily exercises and print details
         dailyExercises.forEach((exercise, index) => {
-          //console.log(`Exercise ${JSON.stringify(exercise)}\n`)
+          console.log(`Exercise ${JSON.stringify(exercise)}\n`)
             //let exerciseobj = JSON.parse(exercise)
 
             //console.log(`Exercise ${index + 1}:`);
-            console.log(`Name: ${exercise.name}`);
-            console.log(`Category: ${exercise.category}`);
-            console.log(`Level: ${exercise.level}\n`);
+            //console.log(`Name: ${exercise.name}`);
+            //console.log(`Category: ${exercise.category}`);
+            //console.log(`Level: ${exercise.level}\n`);
             //console.log(`Muscle Group: ${exercise.muscleGroup.join(', ')}`);
             //console.log(`Equipment: ${exercise.equipment}`);
             //console.log(`Mets: ${exercise.mets}`);
@@ -247,17 +249,22 @@ async function createFullWorkoutPlan(user) {
   Day 3 Upper Body and Pull Day. It has all random exercises it should have 4 pull exercises and one core exercise
   Day 4 Let Day. It has 4 cardio exercises and 1 push. It should have 4 leg exercises and one cardio.
 */
-function generateDailyExercises(exercises, day) {
+function generateDailyExercises(exercises, day, user) {
   const dailyExercises = [];
   console.log(`Generate plan for day ${day}`)
   if (day === 1) {
     // Day 1: Leg Day
-    const legExercises = exercises.filter(exercise => exercise.category === 'lower body');
-    const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+    if(user.level && user.level.toLowerCase() !== 'kids') {
+      const legExercises = exercises.filter(exercise => exercise.category === 'lower body');
+      const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+    }
     
     // Add two specific leg exercises
-    dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
-    dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+    if(user.level && user.level.toLowerCase() !== 'kids') {
+      dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+      dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+    }
+    
     
     // Add two random leg exercises
     dailyExercises.push(getRandomExercise(legExercises));
