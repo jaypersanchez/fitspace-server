@@ -121,7 +121,13 @@ async function createFullWorkoutPlan(user) {
   try {
     const numberOfWeeks = 8;
     const workoutPlan = [];
-    let exercisesPerDay = 5;
+    if(user.level.toLowerCase() === 'Kids') {
+      let exercisesPerDay = 4;
+    }
+    else {
+      let exercisesPerDay = 5;
+    }
+
     console.log(`gymType ${user.gymType}`)
     const queryWorkoutCriteria = {
       gymType: user.gymType,
@@ -139,7 +145,7 @@ async function createFullWorkoutPlan(user) {
         { level: { $in: [user.level] } }
       ]
     };*/
-    const query = {
+    /*const query = {
       $and: [
         {
           $or: [
@@ -149,6 +155,9 @@ async function createFullWorkoutPlan(user) {
         },
         { level: { $in: [user.level] } }
       ]
+    };*/
+    const query = {
+      level: user.level
     };
     const exercises = await Exercise.find(query);
     let workoutDaysPerWeek = user.frequency;
@@ -157,52 +166,20 @@ async function createFullWorkoutPlan(user) {
      * Band aid fix to handle Kids level: 2 days workout per week and only 4 workout types per day
      * Have to override the settings above
      */
-    if(user.level === 'Kids') {
+    if(user.level.toLowerCase() === 'Kids') {
       exercisesPerDay = 4
+      //must be overriden because during onboarding, Kids level has no option for 2 days/week workout
       workoutDaysPerWeek = 2
     }
 
     for (let week = 1; week <= numberOfWeeks; week++) {
       const weeklyPlan = [];
       console.log(`Week ${week}\n`)
-      /*
-        Day 1 Leg: "isometric calf raise + calf raise" and then 2 pull exercises. It should have 4 leg exercises and 1 cardio exercise.
-        Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises, it should have 4 push exercises and 1 core exercise.
-        Day 3 Upper Body and Pull Day. It has all random exercises it should have 4 pull exercises and one core exercise
-        Day 4 Let Day. It has 4 cardio exercises and 1 push. It should have 4 leg exercises and one cardio.
-
-        3 day split example
-            Day 1- Lower, lower, lower, lower, cardio
-            Day 2- push,push,push,push, core
-            Day 3- Pull,Pull, Pull, Pull, core
-            
-            If there was 4 days it would be
-            Day 4 lower, lower , lower , lower , cardio.
-            Day 5 3 core exercises, 2 cardio exercises
-
-            Kids exercises should be 2 workouts days per week, 4 random exercises each day.
-            But they should not repeat until all exercises have been done at least 1x
-      */
+      
       for (let day = 1; day <= workoutDaysPerWeek; day++) {
         //const dailyExercises = generateDailyExercises(exercises, exercisesPerDay);
         const dailyExercises = generateDailyExercises(exercises, day, user);
         console.log(`Day ${day}\n`)
-
-          // Iterate through the daily exercises and print details
-        dailyExercises.forEach((exercise, index) => {
-          console.log(`Exercise ${JSON.stringify(exercise)}\n`)
-            //let exerciseobj = JSON.parse(exercise)
-
-            //console.log(`Exercise ${index + 1}:`);
-            //console.log(`Name: ${exercise.name}`);
-            //console.log(`Category: ${exercise.category}`);
-            //console.log(`Level: ${exercise.level}\n`);
-            //console.log(`Muscle Group: ${exercise.muscleGroup.join(', ')}`);
-            //console.log(`Equipment: ${exercise.equipment}`);
-            //console.log(`Mets: ${exercise.mets}`);
-            // Print other exercise details as needed
-          
-        });
         weeklyPlan.push({ day: day, exercises: dailyExercises });
       }
 
@@ -241,115 +218,151 @@ async function createFullWorkoutPlan(user) {
   }
 }
 
-
-
 /*
-  Day 1 Leg: "isometric calf raise + calf raise" and then 2 pull exercises. It should have 4 leg exercises and 1 cardio exercise.
-  Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises, it should have 4 push exercises and 1 core exercise.
-  Day 3 Upper Body and Pull Day. It has all random exercises it should have 4 pull exercises and one core exercise
-  Day 4 Let Day. It has 4 cardio exercises and 1 push. It should have 4 leg exercises and one cardio.
+        Day 1 Leg: "isometric calf raise + calf raise" and then 2 pull exercises. 
+        It should have 4 leg exercises and 1 cardio exercise.
+
+        Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises.
+        It should have 4 push exercises and 1 core exercise.
+
+        Day 3 Upper Body and Pull Day. It has all random exercises it should have 4 pull exercises and one core exercise
+        Day 4 Let Day. It has 4 cardio exercises and 1 push. It should have 4 leg exercises and one cardio.
+
+        3 day split example
+            Day 1- Lower, lower, lower, lower, cardio
+            Day 2- push,push,push,push, core
+            Day 3- Pull,Pull, Pull, Pull, core
+            
+            If there was 4 days it would be
+            Day 4 lower, lower , lower , lower , cardio.
+            Day 5 3 core exercises, 2 cardio exercises
+
+            Kids exercises should be 2 workouts days per week, 4 random exercises each day.
+            But they should not repeat until all exercises have been done at least 1x
 */
 function generateDailyExercises(exercises, day, user) {
-  const dailyExercises = [];
+
+  let dailyExercises = [];
+  let legExercises
+  let pullExercises
+  let pushExercises
+  let coreExercise
+  let upperBodyExercises
   console.log(`Generate plan for day ${day}`)
+
   if (day === 1) {
 
-    let legExercises
-    let pullExercises
-    let pushExercises
-    let coreExercise
-    let upperExercises
-
-    // Day 1: Leg Day
     if(user.level && user.level.toLowerCase() === 'kids') {
-      pushExercises = exercises.filter(exercise => exercise.category === 'pull');
-      /*upperExercises = exercises.filter(exercise => {
-        const regex = /^upper\s*body$/i;
-        return exercise.muscleGroup && exercise.muscleGroup.match(regex);
-      });*/
-      coreExercise = getRandomExercise(exercises, 'core');
-      dailyExercises.push(getRandomExercise(pushExercises));
-      dailyExercises.push(getRandomExercise(pushExercises));
-      //dailyExercises.push(getRandomExercise(upperExercises));
-      dailyExercises.push(coreExercise);
+      /* Specific to Kids exercises, muscleGroup may have 'core' but the category still falls under 'push' and even 'pull' */
+
+      //get all categorically exercises
+      coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+      pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+
+      //setup the exercises
+      dailyExercises.push(getRandomExercise(pullExercises));
+      dailyExercises.push(getRandomExercise(pullExercises));
+      dailyExercises.push(getRandomExercise(pullExercises));
+      dailyExercises.push(getRandomExercise(pullExercises));
+      //dailyExercises.push(getRandomExercise(coreExercise));
     }
-    
-    // Add two specific leg exercises
-    if(user.level && user.level.toLowerCase() !== 'kids') {
+    else { /* adv and bg */
+      /*Day 1 Leg: "isometric calf raise + calf raise" and then 2 pull exercises. 
+      It should have 4 leg exercises and 1 cardio exercise.*/
+
       legExercises = exercises.filter(exercise => exercise.category === 'lower body');
       pullExercises = exercises.filter(exercise => exercise.category === 'pull');
-      dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
-      dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
-      // Add two random leg exercises
-      dailyExercises.push(getRandomExercise(legExercises));
-      dailyExercises.push(getRandomExercise(legExercises));
-      // Add one cardio exercise
-      dailyExercises.push(getRandomCardioExercise(exercises));
+      coreExercise = exercises.filter(exercise => exercise.category === 'core');
+
+      /* 
+      The Isometric only categorized and in musclegroup as lower body, legs and calves and only exist for level = adv
+      */
+      if(user.level === 'adv') {
+        dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+        dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+        dailyExercises.push(getRandomExercise(pullExercises));
+        dailyExercises.push(getRandomExercise(pullExercises));
+        dailyExercises.push(getRandomExercise(coreExercise));
+      }
+      else {
+        //more likely it's for bg
+        dailyExercises.push(getRandomExercise(pullExercises));
+        dailyExercises.push(getRandomExercise(pullExercises));
+        dailyExercises.push(getRandomExercise(pullExercises));
+        dailyExercises.push(getRandomExercise(pullExercises));
+        dailyExercises.push(getRandomExercise(coreExercise));
+      }
+      
     }
    
-    // Add one cardio exercise
-    //dailyExercises.push(getRandomCardioExercise(exercises));
   } else if (day === 2) {
-    // Day 2: Push Day
-    const pushExercises = exercises.filter(exercise => exercise.category === 'push');
-    const coreExercise = getRandomExercise(exercises, 'core');
-    
-    // Add four random push exercises
-    dailyExercises.push(getRandomExercise(pushExercises));
-    dailyExercises.push(getRandomExercise(pushExercises));
-    dailyExercises.push(getRandomExercise(pushExercises));
-    dailyExercises.push(getRandomExercise(pushExercises));
-    
-    // Add one core exercise
-    dailyExercises.push(coreExercise);
+
+    if(user.level && user.level.toLowerCase() !== 'kids') {
+      pushExercises = exercises.filter(exercise => exercise.category === 'push');
+      coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+            
+      // Add four random push exercises
+      dailyExercises.push(getRandomExercise(pushExercises));
+      dailyExercises.push(getRandomExercise(pushExercises));
+      dailyExercises.push(getRandomExercise(pushExercises));
+      dailyExercises.push(getRandomExercise(pushExercises));
+    }
+    else {
+        /*Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises.
+        It should have 4 push exercises and 1 core exercise.*/
+        //NOTE: for both adv and bg, upper body does not exist in both category and muscle group.  Only in Kids level
+        //So what would be considered upper body workout?
+        pushExercises = exercises.filter(exercise => exercise.category === 'push');
+        coreExercise = exercises.filter(exercise => exercise.category === 'core');
+        
+        // Add four random push exercises
+        dailyExercises.push(getRandomExercise(pushExercises));
+        dailyExercises.push(getRandomExercise(pushExercises));
+        dailyExercises.push(getRandomExercise(pushExercises));
+        dailyExercises.push(getRandomExercise(pushExercises));
+        dailyExercises.push(getRandomExercise(coreExercise));
+    } //else for adv and bg
+
   } else if (day === 3) {
+
+    /*
+    Day 3 Upper Body and Pull Day. It has all random exercises it should have 4 pull exercises and one core exercise
+    3 day split example
+            Day 1- Lower, lower, lower, lower, cardio
+            Day 2- push,push,push,push, core
+            Day 3- Pull,Pull, Pull, Pull, core
+    */
+
     // Day 3: Pull Day
-    const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
-    const coreExercise = getRandomExercise(exercises, 'core');
+    pullExercises = exercises.filter(exercise => exercise.category === 'pull');
+    coreExercise = exercises.filter(exercise => exercise.category === 'core');
     
     // Add four random pull exercises
     dailyExercises.push(getRandomExercise(pullExercises));
     dailyExercises.push(getRandomExercise(pullExercises));
     dailyExercises.push(getRandomExercise(pullExercises));
     dailyExercises.push(getRandomExercise(pullExercises));
-    
-    // Add one core exercise
-    dailyExercises.push(coreExercise);
+    dailyExercises.push(getRandomExercise(coreExercise));
+
   } else if (day === 4) {
-    // Day 4: Leg Day
-    const legExercises = exercises.filter(exercise => exercise.category === 'lower body');
-    //const pushExercises = exercises.filter(exercise => exercise.category === 'push');
-    const coreExercise = getRandomExercise(exercises, 'core');
+    //Day 4 lower, lower , lower , lower , cardio.
+    //NOTE there is no cardio that exist under category and muscleGroup
+    legExercises = exercises.filter(exercise => exercise.category === 'lower body');
+    coreExercise = exercises.filter(exercise => exercise.category === 'core');
     
     dailyExercises.push(getRandomExercise(legExercises));
     dailyExercises.push(getRandomExercise(legExercises));
     dailyExercises.push(getRandomExercise(legExercises));
     dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomCardioExercise(exercises));
-    // Add one core exercise
-    dailyExercises.push(coreExercise);
+    dailyExercises.push(getRandomExercise(coreExercise));
   } else if (day === 5) {
-    // Repeating Day 3: Leg Day
-    //const pullExercises = exercises.filter(exercise => exercise.category === 'pull');
-    //const coreExercise = getRandomExercise(exercises, 'core');
 
-    
-    // Add four random pull exercises
-    //dailyExercises.push(getRandomExercise(pullExercises));
-    //dailyExercises.push(getRandomExercise(pullExercises));
-    //dailyExercises.push(getRandomExercise(pullExercises));
-    //dailyExercises.push(getRandomExercise(pullExercises));
-    
-    // Add one core exercise
-    //dailyExercises.push(coreExercise);
-    dailyExercises.push(getRandomExercise(exercises, 'core'))
-    dailyExercises.push(getRandomExercise(exercises, 'core'))
+    //Day 5 3 core exercises, 2 cardio exercises
+    coreExercise = exercises.filter(exercise => exercise.category === 'core');
 
-    dailyExercises.push(getRandomExercise(exercises, 'core'))
-    
-    // Add one cardio exercise
-    dailyExercises.push(getRandomCardioExercise(exercises));
-    dailyExercises.push(getRandomCardioExercise(exercises));
+    dailyExercises.push(getRandomExercise(coreExercise));
+    dailyExercises.push(getRandomExercise(coreExercise));
+    dailyExercises.push(getRandomExercise(coreExercise));
   }
 
   return dailyExercises;
