@@ -121,11 +121,13 @@ async function createFullWorkoutPlan(user) {
   try {
     const numberOfWeeks = 8;
     const workoutPlan = [];
-    if(user.level.toLowerCase() === 'Kids') {
-      let exercisesPerDay = 4;
+    let exercisesPerDay
+
+    if(user.level && user.level.toLowerCase() === 'kids') {
+      exercisesPerDay = 4;
     }
     else {
-      let exercisesPerDay = 5;
+      exercisesPerDay = 5;
     }
 
     console.log(`gymType ${user.gymType}`)
@@ -160,17 +162,24 @@ async function createFullWorkoutPlan(user) {
       level: user.level
     };
     const exercises = await Exercise.find(query);
-    let workoutDaysPerWeek = user.frequency;
+
+    let workoutDaysPerWeek 
+    if(user.level && user.level.toLowerCase() === 'kids') {
+     workoutDaysPerWeek = 2
+    }
+    else {
+      workoutDaysPerWeek = user.frequency;
+    }
 
     /** 
      * Band aid fix to handle Kids level: 2 days workout per week and only 4 workout types per day
      * Have to override the settings above
      */
-    if(user.level.toLowerCase() === 'Kids') {
+    /*if(user.level.toLowerCase() === 'Kids') {
       exercisesPerDay = 4
       //must be overriden because during onboarding, Kids level has no option for 2 days/week workout
       workoutDaysPerWeek = 2
-    }
+    }*/
 
     for (let week = 1; week <= numberOfWeeks; week++) {
       const weeklyPlan = [];
