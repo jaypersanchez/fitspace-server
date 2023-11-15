@@ -265,15 +265,15 @@ function generateDailyExercises(exercises, day, user) {
       /* Specific to Kids exercises, muscleGroup may have 'core' but the category still falls under 'push' and even 'pull' */
 
       //get all categorically exercises
-      coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
       pullExercises = exercises.filter(exercise => exercise.category === 'pull');
-
+      //coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+      coreExercise = exercises.filter(exercise => exercise.name === 'Low Plank');
       //setup the exercises
       dailyExercises.push(getRandomExercise(pullExercises));
       dailyExercises.push(getRandomExercise(pullExercises));
       dailyExercises.push(getRandomExercise(pullExercises));
       dailyExercises.push(getRandomExercise(pullExercises));
-      //dailyExercises.push(getRandomExercise(coreExercise));
+      //dailyExercises.push(coreExercise);
     }
     else { /* adv and bg */
       /*Day 1 Leg: "isometric calf raise + calf raise" and then 2 pull exercises. 
@@ -306,15 +306,17 @@ function generateDailyExercises(exercises, day, user) {
    
   } else if (day === 2) {
 
-    if(user.level && user.level.toLowerCase() !== 'kids') {
+    if(user.level && user.level.toLowerCase() === 'kids') {
       pushExercises = exercises.filter(exercise => exercise.category === 'push');
-      coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+      //coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+      coreExercise = exercises.filter(exercise => exercise.name === 'Plank Taps');
             
       // Add four random push exercises
       dailyExercises.push(getRandomExercise(pushExercises));
       dailyExercises.push(getRandomExercise(pushExercises));
       dailyExercises.push(getRandomExercise(pushExercises));
       dailyExercises.push(getRandomExercise(pushExercises));
+      //dailyExercises.push(coreExercise);
     }
     else {
         /*Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises.
