@@ -170,7 +170,7 @@ async function createFullWorkoutPlan(user) {
     else {
       workoutDaysPerWeek = user.frequency;
     }
-
+    console.log(`level ${user.level}::workoutdaysperweek ${workoutDaysPerWeek}::exercisesPerDay ${exercisesPerDay}`)
     /** 
      * Band aid fix to handle Kids level: 2 days workout per week and only 4 workout types per day
      * Have to override the settings above
