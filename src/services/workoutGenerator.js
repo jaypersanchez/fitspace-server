@@ -121,11 +121,13 @@ async function createFullWorkoutPlan(user) {
   try {
     const numberOfWeeks = 8;
     const workoutPlan = [];
-    if(user.level.toLowerCase() === 'Kids') {
-      let exercisesPerDay = 4;
+    let exercisesPerDay
+
+    if(user.level && user.level.toLowerCase() === 'kids') {
+      exercisesPerDay = 4;
     }
     else {
-      let exercisesPerDay = 5;
+      exercisesPerDay = 5;
     }
 
     console.log(`gymType ${user.gymType}`)
@@ -160,17 +162,24 @@ async function createFullWorkoutPlan(user) {
       level: user.level
     };
     const exercises = await Exercise.find(query);
-    let workoutDaysPerWeek = user.frequency;
 
+    let workoutDaysPerWeek 
+    if(user.level && user.level.toLowerCase() === 'kids') {
+     workoutDaysPerWeek = 2
+    }
+    else {
+      workoutDaysPerWeek = user.frequency;
+    }
+    console.log(`level ${user.level}::workoutdaysperweek ${workoutDaysPerWeek}::exercisesPerDay ${exercisesPerDay}`)
     /** 
      * Band aid fix to handle Kids level: 2 days workout per week and only 4 workout types per day
      * Have to override the settings above
      */
-    if(user.level.toLowerCase() === 'Kids') {
+    /*if(user.level.toLowerCase() === 'Kids') {
       exercisesPerDay = 4
       //must be overriden because during onboarding, Kids level has no option for 2 days/week workout
       workoutDaysPerWeek = 2
-    }
+    }*/
 
     for (let week = 1; week <= numberOfWeeks; week++) {
       const weeklyPlan = [];
@@ -256,15 +265,15 @@ function generateDailyExercises(exercises, day, user) {
       /* Specific to Kids exercises, muscleGroup may have 'core' but the category still falls under 'push' and even 'pull' */
 
       //get all categorically exercises
-      coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
       pullExercises = exercises.filter(exercise => exercise.category === 'pull');
-
+      //coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+      coreExercise = exercises.filter(exercise => exercise.name === 'Low Plank');
       //setup the exercises
       dailyExercises.push(getRandomExercise(pullExercises));
       dailyExercises.push(getRandomExercise(pullExercises));
       dailyExercises.push(getRandomExercise(pullExercises));
       dailyExercises.push(getRandomExercise(pullExercises));
-      //dailyExercises.push(getRandomExercise(coreExercise));
+      //dailyExercises.push(coreExercise);
     }
     else { /* adv and bg */
       /*Day 1 Leg: "isometric calf raise + calf raise" and then 2 pull exercises. 
@@ -297,15 +306,17 @@ function generateDailyExercises(exercises, day, user) {
    
   } else if (day === 2) {
 
-    if(user.level && user.level.toLowerCase() !== 'kids') {
+    if(user.level && user.level.toLowerCase() === 'kids') {
       pushExercises = exercises.filter(exercise => exercise.category === 'push');
-      coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+      //coreExercise = exercises.filter(exercise => exercise.muscleGroup === 'core'); //getRandomExercise(exercises, 'core');
+      coreExercise = exercises.filter(exercise => exercise.name === 'Plank Taps');
             
       // Add four random push exercises
       dailyExercises.push(getRandomExercise(pushExercises));
       dailyExercises.push(getRandomExercise(pushExercises));
       dailyExercises.push(getRandomExercise(pushExercises));
       dailyExercises.push(getRandomExercise(pushExercises));
+      //dailyExercises.push(coreExercise);
     }
     else {
         /*Day 2 Upper Body and Push Day. It has 4 cardio exercises and one push exercises.
