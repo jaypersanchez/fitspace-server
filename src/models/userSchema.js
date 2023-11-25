@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     default: "bg",
   },
   workoutRegularity: { type: String, enum: ["currently", "months", "years"] },
-  gymGoal: { type: [String], default: ["overallFitnessCardio"] },
+  gymGoal: { type: Array, default: ["overallFitness"] },
   gymType: {
     type: String,
     enum: ["homeGym", "commercialGym", "smallGym", "crossfitGym"],
