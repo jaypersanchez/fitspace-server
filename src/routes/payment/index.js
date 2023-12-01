@@ -11,8 +11,11 @@ paymentRoute.get('/currencies', paymentController.getCurrencies);
 
 // paymentRoute.post("/new", verifyTokenMiddle, paymentController.newSubscription)
 paymentRoute.post(
+  "/subscription-intent",
+  paymentController.subscriptionIntent
+);
+paymentRoute.post(
   "/subscribe",
-  verifyTokenMiddle,
   paymentController.createSubscription
 );
 paymentRoute.post("/new", verifyTokenMiddle, paymentController.paymentIntent);

@@ -39,7 +39,7 @@
     "nodemailer": "^6.8.0",
     "paypal-rest-sdk": "^1.8.1",
     "pm2": "^5.2.2",
-    "stripe": "^11.18.0",
+    "stripe": "^14.5.0",
     "unfetch": "^5.0.0"
   },
   "devDependencies": {
