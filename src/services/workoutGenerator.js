@@ -300,22 +300,47 @@ function generateDailyExercises(exercises, day, user) {
       /* 
       The Isometric only categorized and in musclegroup as lower body, legs and calves and only exist for level = adv
       */
-      if(user.level === 'adv') {
-        dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
-        dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
-        dailyExercises.push(getRandomExercise(pullExercises));
-        dailyExercises.push(getRandomExercise(pullExercises));
-        dailyExercises.push(getRandomExercise(coreExercise));
-      }
-      else {
-        //more likely it's for bg
-        dailyExercises.push(getRandomExercise(pullExercises));
-        dailyExercises.push(getRandomExercise(pullExercises));
-        dailyExercises.push(getRandomExercise(pullExercises));
-        dailyExercises.push(getRandomExercise(pullExercises));
-        dailyExercises.push(getRandomExercise(coreExercise));
-      }
+      if (user.level === 'adv') {
+        // Define an array to track selected exercise IDs
+        const selectedExerciseIds = [];
       
+        // Function to get a random exercise from the provided array while ensuring uniqueness
+        const getRandomUniqueExercise = (exerciseArray) => {
+          let randomExercise;
+          do {
+            randomExercise = getRandomExercise(exerciseArray);
+          } while (selectedExerciseIds.includes(randomExercise._id));
+          
+          // Add the selected exercise's _id to the tracking array
+          selectedExerciseIds.push(randomExercise._id);
+          return randomExercise;
+        };
+      
+        dailyExercises.push(exercises.find(exercise => exercise.name === 'Isometric calf raise + calf raise'));
+        dailyExercises.push(getRandomUniqueExercise(pullExercises));
+        dailyExercises.push(getRandomUniqueExercise(pullExercises));
+        dailyExercises.push(getRandomUniqueExercise(coreExercise));
+      } else {
+        // Define an array to track selected exercise IDs
+        const selectedExerciseIds = [];
+      
+        // Function to get a random exercise from the provided array while ensuring uniqueness
+        const getRandomUniqueExercise = (exerciseArray) => {
+          let randomExercise;
+          do {
+            randomExercise = getRandomExercise(exerciseArray);
+          } while (selectedExerciseIds.includes(randomExercise._id));
+      
+          // Add the selected exercise's _id to the tracking array
+          selectedExerciseIds.push(randomExercise._id);
+          return randomExercise;
+        };
+      
+        dailyExercises.push(getRandomUniqueExercise(pullExercises));
+        dailyExercises.push(getRandomUniqueExercise(pullExercises));
+        dailyExercises.push(getRandomUniqueExercise(pullExercises));
+        dailyExercises.push(getRandomUniqueExercise(coreExercise));
+      }
     }
    
   } else if (day === 2) {
@@ -351,13 +376,29 @@ function generateDailyExercises(exercises, day, user) {
         //So what would be considered upper body workout?
         pushExercises = exercises.filter(exercise => exercise.category === 'push');
         coreExercise = exercises.filter(exercise => exercise.category === 'core');
-        
-        // Add four random push exercises
-        dailyExercises.push(getRandomExercise(pushExercises));
-        dailyExercises.push(getRandomExercise(pushExercises));
-        dailyExercises.push(getRandomExercise(pushExercises));
-        dailyExercises.push(getRandomExercise(pushExercises));
-        dailyExercises.push(getRandomExercise(coreExercise));
+
+        // Define an array to track selected exercise IDs
+        const selectedExerciseIds = [];
+
+        // Function to get a random exercise from the provided array while ensuring uniqueness
+        const getRandomUniqueExercise = (exerciseArray) => {
+          let randomExercise;
+          do {
+            randomExercise = getRandomExercise(exerciseArray);
+          } while (selectedExerciseIds.includes(randomExercise._id));
+
+          // Add the selected exercise's _id to the tracking array
+          selectedExerciseIds.push(randomExercise._id);
+          return randomExercise;
+        };
+
+        // Add four random push exercises while ensuring uniqueness
+        for (let i = 0; i < 4; i++) {
+          dailyExercises.push(getRandomUniqueExercise(pushExercises));
+        }
+
+        // Add a random core exercise while ensuring uniqueness
+        dailyExercises.push(getRandomUniqueExercise(coreExercise));
     } //else for adv and bg
 
   } else if (day === 3) {
@@ -386,20 +427,60 @@ function generateDailyExercises(exercises, day, user) {
     //NOTE there is no cardio that exist under category and muscleGroup
     legExercises = exercises.filter(exercise => exercise.category === 'lower body');
     coreExercise = exercises.filter(exercise => exercise.category === 'core');
-    
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(legExercises));
-    dailyExercises.push(getRandomExercise(coreExercise));
+
+    // Define an array to track selected exercise IDs
+    const selectedExerciseIds = [];
+
+    // Function to get a random exercise from the provided array while ensuring uniqueness
+    const getRandomUniqueExercise = (exerciseArray) => {
+      let randomExercise;
+      do {
+        randomExercise = getRandomExercise(exerciseArray);
+      } while (selectedExerciseIds.includes(randomExercise._id));
+
+      // Add the selected exercise's _id to the tracking array
+      selectedExerciseIds.push(randomExercise._id);
+      return randomExercise;
+    };
+
+    // Add four random leg exercises while ensuring uniqueness
+    for (let i = 0; i < 4; i++) {
+      dailyExercises.push(getRandomUniqueExercise(legExercises));
+    }
+
+    // Add a random core exercise while ensuring uniqueness
+    dailyExercises.push(getRandomUniqueExercise(coreExercise));
+
+
   } else if (day === 5) {
 
-    //Day 5 3 core exercises, 2 cardio exercises
-    coreExercise = exercises.filter(exercise => exercise.category === 'core');
+      // Day 5: 3 core exercises, 2 cardio exercises
+      coreExercise = exercises.filter(exercise => exercise.category === 'core');
 
-    dailyExercises.push(getRandomExercise(coreExercise));
-    dailyExercises.push(getRandomExercise(coreExercise));
-    dailyExercises.push(getRandomExercise(coreExercise));
+      // Define an array to track selected exercise IDs
+      const selectedExerciseIds = [];
+
+      // Function to get a random exercise from the provided array while ensuring uniqueness
+      const getRandomUniqueExercise = (exerciseArray) => {
+        let randomExercise;
+        do {
+          randomExercise = getRandomExercise(exerciseArray);
+        } while (selectedExerciseIds.includes(randomExercise._id));
+
+        // Add the selected exercise's _id to the tracking array
+        selectedExerciseIds.push(randomExercise._id);
+        return randomExercise;
+      };
+
+      // Add 3 random core exercises while ensuring uniqueness
+      for (let i = 0; i < 3; i++) {
+        dailyExercises.push(getRandomUniqueExercise(coreExercise));
+      }
+
+      // Add 2 cardio exercises (assuming you have a cardio category)
+      const cardioExercises = exercises.filter(exercise => exercise.category === 'cardio');
+      dailyExercises.push(getRandomExercise(cardioExercises));
+      dailyExercises.push(getRandomExercise(cardioExercises));
   }
 
   return dailyExercises;
