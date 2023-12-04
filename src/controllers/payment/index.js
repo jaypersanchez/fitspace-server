@@ -2,32 +2,29 @@ import mongoose from "mongoose";
 import createUserService from "../../services/createUserService.js";
 import { validationResult } from "express-validator";
 import UserModel from "../../models/userSchema.js";
-import currenciesModel from "../../models/curennciesSchema.js"
+import currenciesModel from "../../models/curennciesSchema.js";
 import loginUser from "../../services/login.js";
 import { resetToken } from "../../services/resetTokens.js";
 import Stripe from "stripe";
 const stripeKey = process.env.STRIPE_SECRET_KEY;
 const stripe = new Stripe(stripeKey);
-console.log(`Stripe Key ${process.env.STRIPE_SECRET_KEY}`)
+console.log(`Stripe Key ${process.env.STRIPE_SECRET_KEY}`);
 /**
  *  The user controller
  * @namespace paymentController
  */
 
 export const paymentController = {
-  
-  
-  getCurrencies: async(req, res, next) => {
+  getCurrencies: async (req, res, next) => {
     try {
       // Fetch all currencies from the database
       const currencies = await currenciesModel.find();
-      console.log(`${currencies}`)
+      console.log(`${currencies}`);
       // Return the currencies as a JSON response
       res.json(currencies);
-    }
-    catch (error) {
+    } catch (error) {
       console.warn("ERROR: ", error.message);
-      res.json({error: error.message})
+      res.json({ error: error.message });
     }
   },
 
@@ -40,18 +37,34 @@ export const paymentController = {
    */
   paymentIntent: async (req, res, next) => {
     try {
-      console.log(`Payment Intent`)
-      const paymentIntent = stripe.paymentIntents.create({
-        amount: Math.round(req.body.amount*100),
+      console.log(`Payment Intent`, req.body);
+
+      const UserInfo = await UserModel.findById(req.body._id);
+
+      const ephemeralKey = await stripe.ephemeralKeys.create(
+        { customer: UserInfo.customerId },
+        { apiVersion: "2023-10-16" }
+      );
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(req.body.amount * 100),
         currency: req.body.currency,
-        automatic_payment_methods: {
-          enabled: true
-        }
-      })
-      res.json({paymentIntent: (await paymentIntent).client_secret})
+        customer: UserInfo.customerId,
+        // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+        payment_method_types: ["card", "us_bank_account", "link", "cashapp"],
+        // automatic_payment_methods: {
+        //   enabled: true,
+        // },
+      });
+
+      res.json({
+        paymentIntent: paymentIntent.client_secret,
+        ephemeralKey: ephemeralKey.secret,
+        customer: UserInfo.customerId,
+      });
     } catch (error) {
       console.warn("ERROR: ", error.message);
-      res.json({error: error.message})
+      res.json({ error: error.message });
     }
   },
   /**
@@ -77,65 +90,87 @@ export const paymentController = {
     }
   },
 
-  createSubscription: async (req, res, next) => {
-    console.log("creating a Subscription");
+  subscriptionIntent: async (req, res, next) => {
+    console.log("creating a Subscription Intent");
     try {
-      const { name, email, paymentMethod, paymentSchedule } = req.body;
-      console.log("In subscription user", req.user);
-      // Create a customer
-      const customer = await stripe.customers.create({
-        email,
-        name,
-        payment_method: paymentMethod,
-        invoice_settings: { default_payment_method: paymentMethod },
+      const { _id } = req.body;
+
+      const UserInfo = await UserModel.findById(_id);
+
+      console.log({ UserInfo: UserInfo.stripeId.customerId });
+
+      const setupIntent = await stripe.setupIntents.create({
+        customer: UserInfo.stripeId.customerId,
+        payment_method_types: ["card"],
       });
-      console.log("customer was created", customer.id);
-      let foundUser = await UserModel.findOne({ email: req.user.email });
-      let updatedUser = await UserModel.findOneAndUpdate(
-        { email: req.user.email },
-        { customerId: customer.id, paymentSchedule: paymentSchedule },
+
+      const ephemeralKey = await stripe.ephemeralKeys.create(
+        { customer: UserInfo.stripeId.customerId },
+        { apiVersion: "2020-08-27" }
+      );
+
+      console.log({ setupIntent: setupIntent });
+
+      return res.json({
+        paymentIntent: setupIntent.client_secret,
+        ephemeralKey: ephemeralKey.secret,
+        customer: UserInfo.stripeId.customerId,
+        setupId: setupIntent.id,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  createSubscription: async (req, res, next) => {
+    console.log("Subscribing");
+    try {
+      const { _id, plan, setupId } = req.body;
+
+      const UserInfo = await UserModel.findById(_id);
+
+      const setupIntents = await stripe.setupIntents.retrieve(setupId);
+
+      const PRICE_ID = (plan) => {
+        switch (plan) {
+          case "month":
+            return process.env.SUBS_MONTHLY_PAY;
+          case "year":
+            return process.env.SUBS_YEARLY_PAY;
+          default:
+            return process.env.SUBS_MONTHLY_PAY;
+        }
+      };
+
+      console.log({ paymentMethods: setupIntents.payment_method, setupId });
+
+      const subscription = await stripe.subscriptions.create({
+        customer: UserInfo.stripeId.customerId,
+        items: [{ price: PRICE_ID(plan) }],
+        default_payment_method: setupIntents.payment_method,
+        payment_settings: {
+          payment_method_types: ["card", "us_bank_account"],
+        },
+      });
+
+      console.log({ subscription });
+
+      await UserModel.findByIdAndUpdate(
+        { _id },
+        {
+          stripeId: {
+            ...UserInfo.stripeId,
+            setupId,
+            subscriptionId: subscription.id,
+          },
+        },
         { new: true }
       );
-      console.log("the found user is", foundUser);
-      console.log("the updated user is", updatedUser);
-      // Save the customer id to the user
-      // let user = await UserModel.findOneAndUpdate({_id:req.user._id}, {customerId: customer.id});
-      console.log("customer was created", customer.id);
-      // Create a product
-      const product = await stripe.products.create({
-        name: "Fitspace Subscription",
-      });
-      // Create a subscription
-      const subscriptionTime = paymentSchedule === "monthly" ? "month" : "year";
-      const subscriptionCost = paymentSchedule === "monthly" ? 1999 : 9999;
-      const trialPeriod = paymentSchedule === "trial" ? 7 : 0;
-      const trialPlan = paymentSchedule === "trial" ? true : false;
-      const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
-        items: [
-          {
-            price_data: {
-              currency: "usd",
-              product: product.id,
-              unit_amount: subscriptionCost,
-              recurring: {
-                interval: subscriptionTime,
-              },
-            },
-          },
-        ],
-        trial_period_days: trialPeriod,
-        trial_from_plan: trialPlan,
-        payment_settings: {
-          payment_method_types: ["card"],
-          save_default_payment_method: "on_subscription",
-        },
-        expand: ["latest_invoice.payment_intent"],
-      });
-      // Send back the client secret for payment
-      res.json({
-        message: "Subscription successfully initiated",
-        clientSecret: subscription.latest_invoice.payment_intent.client_secret,
+
+      return res.json({
+        customer: UserInfo.stripeId.customerId,
+        status: subscription.status,
       });
     } catch (err) {
       console.error(err);

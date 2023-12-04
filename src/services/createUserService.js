@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 import userModel from "../models/userSchema.js";
 import { jwtAuth } from "../tools/index.js";
 
+import Stripe from "stripe";
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+const stripe = new Stripe(stripeKey);
+
 /**
  * Function that creates a new user retuns the user ID
  * @param {*} req
@@ -14,7 +18,8 @@ async function createUserService(req, res) {
       if(userCheck.length > 0) {
         res.status(403).send({message: "email already in use"})
       } else {
-        const newUser = new userModel(req.body);
+        const customerId = await stripe.customers.create({email:req.body.email, name: req.body.name});
+        const newUser = new userModel({...req.body, stripeId: {customerId: customerId.id}});
         const { _id } = await newUser.save();
         const user = await userModel.findById(_id)
         //this is throwing up
