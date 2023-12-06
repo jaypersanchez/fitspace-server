@@ -12,6 +12,7 @@ const userRoute = express.Router();
 userRoute.post("/new", newUserValidation, userController.createUser);
 userRoute.post("/login", userLoginValidation, userController.userLogin);
 userRoute.get("/self", userController.userInfo);
+userRoute.get("/allusers", userController.allUsers)
 userRoute.put(
   "/refreshToken",
   verifyTokenMiddle,

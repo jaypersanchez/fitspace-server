@@ -247,6 +247,14 @@ export const userController = {
       return undefined;
     }
   },
+  allUsers: async(req, res, next) => {
+    try {
+      const users = await User.find({});
+      res.json(users);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  },
   /**
    * The user info controller returns the user info
    * @funtion userInfo
