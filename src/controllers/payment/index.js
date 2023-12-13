@@ -9,6 +9,8 @@ import Stripe from "stripe";
 const stripeKey = process.env.STRIPE_SECRET_KEY;
 const stripe = new Stripe(stripeKey);
 console.log(`Stripe Key ${process.env.STRIPE_SECRET_KEY}`);
+
+import moment from "moment/moment.js";
 /**
  *  The user controller
  * @namespace paymentController
@@ -130,6 +132,17 @@ export const paymentController = {
 
       const UserInfo = await UserModel.findById(_id);
 
+      const nextPaymentSchedule = (plan, date) => {
+        switch (plan) {
+          case "month":
+            return moment(date).add(1, "months").toISOString();
+          case "year":
+            return moment(date).add(1, "years").toISOString();
+          default:
+            return moment(date).add(7, "days").toISOString();
+        }
+      };
+
       const setupIntents = await stripe.setupIntents.retrieve(setupId);
 
       const PRICE_ID = (plan) => {
@@ -143,7 +156,9 @@ export const paymentController = {
         }
       };
 
-      console.log({ paymentMethods: setupIntents.payment_method, setupId });
+      // if (UserInfo.stripeId.subscriptionId) {
+      //   await stripe.subscriptions.cancel(UserInfo.stripeId.subscriptionId);
+      // }
 
       const subscription = await stripe.subscriptions.create({
         customer: UserInfo.stripeId.customerId,
@@ -164,6 +179,11 @@ export const paymentController = {
             setupId,
             subscriptionId: subscription.id,
           },
+          subscriptionDate: moment().toISOString(),
+          nextPaymentSchedule: nextPaymentSchedule(
+            plan,
+            UserInfo.registeredDate
+          ),
         },
         { new: true }
       );
@@ -171,6 +191,44 @@ export const paymentController = {
       return res.json({
         customer: UserInfo.stripeId.customerId,
         status: subscription.status,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  cancelSubscription: async (req, res, next) => {
+    console.log("creating a Subscription Intent");
+    try {
+      const { _id } = req.body;
+
+      const UserInfo = await UserModel.findById(_id);
+
+      const nextPaymentSchedule = moment(UserInfo.registeredDate)
+        .add(7, "days")
+        .toISOString();
+
+      const subscription = await stripe.subscriptions.cancel(
+        UserInfo.stripeId.subscriptionId
+      );
+
+      await UserModel.findByIdAndUpdate(
+        { _id },
+        {
+          stripeId: {
+            ...UserInfo.stripeId,
+            subscriptionId: null,
+          },
+          paymentSchedule: "trial",
+          nextPaymentSchedule,
+        },
+        { new: true }
+      );
+
+      console.log({ subscription });
+      return res.json({
+        subscription,
       });
     } catch (err) {
       console.error(err);
