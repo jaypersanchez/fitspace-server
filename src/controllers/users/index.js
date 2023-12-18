@@ -189,7 +189,7 @@ export const userController = {
       ]);
   
       if (result.length === 0) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'No exercises avaialbe.' });
       }
   
       // Assuming you want to send the workoutPlans array in the response
@@ -469,6 +469,25 @@ export const userController = {
       console.error('Error generating workout history completion:', error);
       throw error;
     }
+  },
+
+  getUserWeekNumber: async(req, res, next) => {
+      try {
+            
+        // Extract the user ID from the request, assuming it's passed as a parameter
+        const userId = req.params.userId;
+        const objectId = mongoose.Types.ObjectId(userId); 
+        
+        // Query the database to count the number of records for this user
+        const count = await CompleteWorkoutweek.countDocuments({ userId: objectId });
+        console.log(`Getting current week number ${count} for ${userId}`)
+        // Send the count as a response
+        res.json({ weekNumber: count });
+      }
+      catch(error) {
+        console.error('Unable to determine user\'s current week', error);
+        res.status(500).send('Error in fetching user week number');
+      }
   }
 
 };

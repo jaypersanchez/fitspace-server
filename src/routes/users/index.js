@@ -32,5 +32,6 @@ userRoute.get("/gymtypes", userController.getGymTypeRef);
 userRoute.get("/gymgoals", userController.getGymGoalRef);
 userRoute.get("/insights/workout-history", userController.getWorkoutHistory)
 userRoute.get("/insights/workout-history/completions", userController.getWorkoutHistorySummary)
+userRoute.get("/current-week-number/:userId", userController.getUserWeekNumber)
 
 export { userRoute };
