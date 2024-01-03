@@ -145,28 +145,26 @@ export const paymentController = {
 
       const setupIntents = await stripe.setupIntents.retrieve(setupId);
 
-      const PRICE_ID = (plan) => {
-        switch (plan) {
-          case "month":
-            return process.env.SUBS_MONTHLY_PAY;
-          case "year":
-            return process.env.SUBS_YEARLY_PAY;
-          default:
-            return process.env.SUBS_MONTHLY_PAY;
-        }
+      const price = {
+        month: process.env.SUBS_MONTHLY_PAY,
+        year: process.env.SUBS_YEARLY_PAY,
+        trial: process.env.SUBS_MONTHLY_PAY,
       };
 
-      // if (UserInfo.stripeId.subscriptionId) {
-      //   await stripe.subscriptions.cancel(UserInfo.stripeId.subscriptionId);
-      // }
+      console.log({ plan: UserInfo.paymentSchedule, plan });
+
+      if (UserInfo.stripeId.subscriptionId) {
+        await stripe.subscriptions.cancel(UserInfo.stripeId.subscriptionId);
+      }
 
       const subscription = await stripe.subscriptions.create({
         customer: UserInfo.stripeId.customerId,
-        items: [{ price: PRICE_ID(plan) }],
+        items: [{ price: price[plan] }],
         default_payment_method: setupIntents.payment_method,
         payment_settings: {
           payment_method_types: ["card", "us_bank_account"],
         },
+        ...(plan === "trial" ? { trial_period_days: 7 } : {}),
       });
 
       console.log({ subscription });
