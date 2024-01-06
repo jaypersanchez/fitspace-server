@@ -13,6 +13,7 @@ paymentRoute.get("/currencies", paymentController.getCurrencies);
 paymentRoute.post("/subscription-intent", paymentController.subscriptionIntent);
 paymentRoute.post("/subscribe", paymentController.createSubscription);
 paymentRoute.post("/cancel-subscription", paymentController.cancelSubscription);
+paymentRoute.post("/check-subscription", paymentController.checkSubscription);
 paymentRoute.post("/new", verifyTokenMiddle, paymentController.paymentIntent);
 paymentRoute.get("/ptoken", paymentController.publishableToken);
 

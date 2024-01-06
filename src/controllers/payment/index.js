@@ -129,6 +129,7 @@ export const paymentController = {
     console.log("Subscribing");
     try {
       const { _id, plan, setupId } = req.body;
+      const trial_period = parseInt(process.env.TRIAL_PERIOD_DAYS || 7);
 
       const UserInfo = await UserModel.findById(_id);
 
@@ -164,7 +165,7 @@ export const paymentController = {
         payment_settings: {
           payment_method_types: ["card", "us_bank_account"],
         },
-        ...(plan === "trial" ? { trial_period_days: 7 } : {}),
+        ...(plan === "trial" ? { trial_period_days: trial_period } : {}),
       });
 
       console.log({ subscription });
@@ -177,11 +178,16 @@ export const paymentController = {
             setupId,
             subscriptionId: subscription.id,
           },
-          subscriptionDate: moment().toISOString(),
-          nextPaymentSchedule: nextPaymentSchedule(
-            plan,
-            UserInfo.registeredDate
-          ),
+          subscriptionDate: moment.unix(subscription.created).toISOString(),
+          paymentActive: true,
+          subscriptionStatus: subscription.status,
+          ...(subscription.trial_end
+            ? { trialPeriod: moment.unix(subscription.trial_end).toISOString() }
+            : {}),
+          // nextPaymentSchedule: nextPaymentSchedule(
+          //   plan,
+          //   UserInfo.registeredDate
+          // ),
         },
         { new: true }
       );
@@ -197,7 +203,7 @@ export const paymentController = {
   },
 
   cancelSubscription: async (req, res, next) => {
-    console.log("creating a Subscription Intent");
+    console.log("Canceling Subscriptio");
     try {
       const { _id } = req.body;
 
@@ -214,12 +220,11 @@ export const paymentController = {
       await UserModel.findByIdAndUpdate(
         { _id },
         {
-          stripeId: {
-            ...UserInfo.stripeId,
-            subscriptionId: null,
-          },
           paymentSchedule: "trial",
-          nextPaymentSchedule,
+          paymentActive: false,
+          subscriptionStatus: subscription.status,
+
+          // nextPaymentSchedule,
         },
         { new: true }
       );
@@ -227,6 +232,49 @@ export const paymentController = {
       console.log({ subscription });
       return res.json({
         subscription,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  checkSubscription: async (req, res, next) => {
+    console.log("Checking Subscription");
+    try {
+      const { _id } = req.body;
+
+      const UserInfo = await UserModel.findById(_id);
+
+      const subscription = await stripe.subscriptions.retrieve(
+        UserInfo.stripeId.subscriptionId
+      );
+
+      await UserModel.findByIdAndUpdate(
+        { _id },
+        {
+          subscriptionStatus: subscription.status,
+          paymentActive: subscription.status !== "canceled",
+          paymentSchedule:
+            subscription.status !== "trialing"
+              ? subscription.plan.interval
+              : "trial",
+          ...(subscription.trial_end
+            ? { trialPeriod: moment.unix(subscription.trial_end).toISOString() }
+            : {}),
+        },
+        { new: true }
+      );
+
+      console.log({ subscription });
+      return res.json({
+        subscriptionStatus: subscription.status,
+        paymentActive: subscription.status !== "canceled",
+        paymentSchedule:
+          subscription.status !== "trialing"
+            ? subscription.plan.interval
+            : "trial",
+        trialPeriod: moment.unix(subscription.trial_end).toISOString() || null,
       });
     } catch (err) {
       console.error(err);

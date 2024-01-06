@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     default: "bg",
   },
   workoutRegularity: { type: String, enum: ["currently", "months", "years"] },
-  gymGoal: { type: Array, },
+  gymGoal: { type: Array },
   gymType: {
     type: String,
     enum: ["homeGym", "commercialGym", "smallGym", "crossfitGym"],
@@ -37,6 +37,8 @@ const userSchema = new mongoose.Schema({
     setupId: { type: String, default: null },
     subscriptionId: { type: String, default: null },
   },
+  trialPeriod: { type: Date, required: false },
+  subscriptionStatus: { type: String, default: null },
   paymentSchedule: {
     type: String,
     enum: ["month", "year", "trial"],
@@ -61,18 +63,20 @@ const userSchema = new mongoose.Schema({
       ],
     },
   ],
-  registeredDate: { type: Date, default: Date.now, required: true},
-  subscriptionDate: { type: Date, default: Date.now, required: false},
+  registeredDate: { type: Date, default: Date.now, required: true },
+  subscriptionDate: { type: Date, default: Date.now, required: false },
   nextPaymentSchedule: {
     type: Date,
     required: false,
   },
-  isSubscriptionExpired: { type: Boolean, required: false, default: false},
-  autoRenewal: { type: Boolean, required: false, default: false},
-  stepTracker: [{
-    date: { type: Date, required: true },
-    steps: { type: Number, required: true },
-  }],
+  isSubscriptionExpired: { type: Boolean, required: false, default: false },
+  autoRenewal: { type: Boolean, required: false, default: false },
+  stepTracker: [
+    {
+      date: { type: Date, required: true },
+      steps: { type: Number, required: true },
+    },
+  ],
   coach: {
     type: Boolean,
     default: false,
@@ -102,16 +106,16 @@ userSchema.static("findUsers", async function (query) {
 });
 
 // Define a pre-save middleware to handle the "paymentSchedule" enum values
-userSchema.pre('save', function (next) {
-  if (this.paymentSchedule === 'trial') {
+userSchema.pre("save", function (next) {
+  if (this.paymentSchedule === "trial") {
     // Calculate the nextPaymentSchedule based on subscriptionDate + 7 days for "trial"
     this.nextPaymentSchedule = new Date(this.subscriptionDate);
     this.nextPaymentSchedule.setDate(this.nextPaymentSchedule.getDate() + 7);
-  } else if (this.paymentSchedule === 'month') {
+  } else if (this.paymentSchedule === "month") {
     // Calculate the nextPaymentSchedule based on subscriptionDate + 30 days for "month"
     this.nextPaymentSchedule = new Date(this.subscriptionDate);
     this.nextPaymentSchedule.setDate(this.nextPaymentSchedule.getDate() + 30);
-  } else if (this.paymentSchedule === 'year') {
+  } else if (this.paymentSchedule === "year") {
     // Calculate the nextPaymentSchedule based on subscriptionDate + 365 days for "year"
     this.nextPaymentSchedule = new Date(this.subscriptionDate);
     this.nextPaymentSchedule.setDate(this.nextPaymentSchedule.getDate() + 365);
