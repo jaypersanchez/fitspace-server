@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     default: "bg",
   },
   workoutRegularity: { type: String, enum: ["currently", "months", "years"] },
-  gymGoal: { type: Array, },
+  gymGoal: { type: Array },
   gymType: {
     type: String,
     enum: ["homeGym", "commercialGym", "smallGym", "crossfitGym"],
@@ -37,6 +37,8 @@ const userSchema = new mongoose.Schema({
     setupId: { type: String, default: null },
     subscriptionId: { type: String, default: null },
   },
+  trialPeriod: { type: Date, required: false },
+  subscriptionStatus: { type: String, default: null },
   paymentSchedule: {
     type: String,
     enum: ["month", "year", "trial"],
@@ -61,23 +63,18 @@ const userSchema = new mongoose.Schema({
       ],
     },
   ],
-  registeredDate: { type: Date, default: Date.now, required: true},
-  subscriptionDate: { type: Date, default: Date.now, required: false},
-  isSubscriptionExpired: { type: Boolean, required: false, default: false},
-  autoRenewal: { type: Boolean, required: false, default: false},
-  stepTracker: [{
-    date: { type: Date, required: true },
-    steps: { type: Number, required: true },
-  }],
-  paymentHistory: [
+  registeredDate: { type: Date, default: Date.now, required: true },
+  subscriptionDate: { type: Date, default: Date.now, required: false },
+  nextPaymentSchedule: {
+    type: Date,
+    required: false,
+  },
+  isSubscriptionExpired: { type: Boolean, required: false, default: false },
+  autoRenewal: { type: Boolean, required: false, default: false },
+  stepTracker: [
     {
-      paymentReceipt: mongoose.Schema.Types.Mixed, // Store raw JSON data
-      paymentDate: Date,
-      amount: Number,
-      subscription: {
-        type: String,
-        enum: ['weekly', 'monthly', 'yearly'],
-      },
+      date: { type: Date, required: true },
+      steps: { type: Number, required: true },
     },
   ],
   coach: {
@@ -106,6 +103,27 @@ userSchema.static("findUsers", async function (query) {
     .skip(query.options.skip)
     .sort(query.options.sort);
   return { total, users };
+});
+
+// Define a pre-save middleware to handle the "paymentSchedule" enum values
+userSchema.pre("save", function (next) {
+  if (this.paymentSchedule === "trial") {
+    // Calculate the nextPaymentSchedule based on subscriptionDate + 7 days for "trial"
+    this.nextPaymentSchedule = new Date(this.subscriptionDate);
+    this.nextPaymentSchedule.setDate(this.nextPaymentSchedule.getDate() + 7);
+  } else if (this.paymentSchedule === "month") {
+    // Calculate the nextPaymentSchedule based on subscriptionDate + 30 days for "month"
+    this.nextPaymentSchedule = new Date(this.subscriptionDate);
+    this.nextPaymentSchedule.setDate(this.nextPaymentSchedule.getDate() + 30);
+  } else if (this.paymentSchedule === "year") {
+    // Calculate the nextPaymentSchedule based on subscriptionDate + 365 days for "year"
+    this.nextPaymentSchedule = new Date(this.subscriptionDate);
+    this.nextPaymentSchedule.setDate(this.nextPaymentSchedule.getDate() + 365);
+  } else {
+    // If paymentSchedule is not recognized, set nextPaymentSchedule to null
+    this.nextPaymentSchedule = null;
+  }
+  next();
 });
 
 userSchema.pre("save", async function () {

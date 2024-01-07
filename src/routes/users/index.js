@@ -12,6 +12,7 @@ const userRoute = express.Router();
 userRoute.post("/new", newUserValidation, userController.createUser);
 userRoute.post("/login", userLoginValidation, userController.userLogin);
 userRoute.get("/self", userController.userInfo);
+userRoute.get("/allusers", userController.allUsers)
 userRoute.put(
   "/refreshToken",
   verifyTokenMiddle,
@@ -31,5 +32,6 @@ userRoute.get("/gymtypes", userController.getGymTypeRef);
 userRoute.get("/gymgoals", userController.getGymGoalRef);
 userRoute.get("/insights/workout-history", userController.getWorkoutHistory)
 userRoute.get("/insights/workout-history/completions", userController.getWorkoutHistorySummary)
+userRoute.get("/current-week-number/:userId", userController.getUserWeekNumber)
 
 export { userRoute };
